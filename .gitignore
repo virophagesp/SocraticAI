@@ -1,4 +1,5 @@
 # python virtual environment
+.venv/
 run_ai/
 # preprocessed data for training and validating the ai
 input.txt
