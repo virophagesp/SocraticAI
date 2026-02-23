@@ -53,7 +53,7 @@ def raw_to_processed(raw_data):
             #  but could cause issues and confusion for users
             #  if it seemingly starts getting new weird inputs
             #  that weren't typed in
-            for i in range(128):
+            for i in range(BLOCK_SIZE):
                 output_data += '\n'
             # Print question then answer
             output_data += f'question: "{question}"\n'
