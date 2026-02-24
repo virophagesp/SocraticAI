@@ -310,9 +310,14 @@ class GPTLanguageModel(nn.Module):
         # load block sized chunks into inputs context and targets
         context_data = []
         targets_data = []
-        for data_index in data_batch:
-            context_data.append(data[data_index: data_index + BLOCK_SIZE])
-            targets_data.append(data[data_index + 1: data_index + BLOCK_SIZE + 1])
+        data_index = 0
+        while data_index < len(data_batch):
+            if data[data_batch[data_index] + BLOCK_SIZE].tolist() != encode('"')[0]:
+                context_data.append(data[data_batch[data_index]: data_batch[data_index] + BLOCK_SIZE])
+                targets_data.append(data[data_batch[data_index] + 1: data_batch[data_index] + BLOCK_SIZE + 1])
+                data_index += 1
+            else:
+                data_batch[data_index] = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
         context = torch.stack(context_data)
         context.to(DEVICE)
         targets = torch.stack(targets_data)
@@ -326,11 +331,11 @@ class GPTLanguageModel(nn.Module):
 
         return loss
 
-    def generate(self, context, max_new_tokens):
+    def generate(self, context):
         """ generate tokens after  """
 
         # context is initally (1, BLOCK_SIZE) array of indices in the current context
-        for _ in range(max_new_tokens):
+        while decode(context[0].tolist())[-1] != '"':
             # crop context to the last BLOCK_SIZE tokens
             context_crop = context[:, -BLOCK_SIZE:]
             # get the predictions
@@ -407,7 +412,7 @@ class GPTLanguageModel(nn.Module):
         )
         for looper in range(len(question)):
             context[0][looper] = question[looper]
-        generated = self.generate(context, max_new_tokens=25)
+        generated = self.generate(context)
 
         # blank line between separate sets of questions and answers
         print_and_write_to_file('')
