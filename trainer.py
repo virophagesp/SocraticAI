@@ -304,20 +304,17 @@ class GPTLanguageModel(nn.Module):
     def batch(self, data):
         """ get a batch of training data """
 
-        # load a small batch of the data for inputs context and targets
-        data_batch = torch.randint(len(data) - BLOCK_SIZE, (BATCH_SIZE,))
-
-        # load block sized chunks into inputs context and targets
+        # load block sized chunks of a batch of the data for inputs context and targets
         context_data = []
         targets_data = []
         data_index = 0
-        while data_index < len(data_batch):
-            if data[data_batch[data_index] + BLOCK_SIZE].tolist() != encode('"')[0]:
-                context_data.append(data[data_batch[data_index]: data_batch[data_index] + BLOCK_SIZE])
-                targets_data.append(data[data_batch[data_index] + 1: data_batch[data_index] + BLOCK_SIZE + 1])
-                data_index += 1
-            else:
-                data_batch[data_index] = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
+        while data_index < BATCH_SIZE:
+            data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
+            if len(data) > data_batch + BLOCK_SIZE + 1:
+                if data[data_batch + BLOCK_SIZE + 1].tolist() != encode('\n')[0]:
+                    context_data.append(data[data_batch: data_batch + BLOCK_SIZE])
+                    targets_data.append(data[data_batch + 1: data_batch + BLOCK_SIZE + 1])
+                    data_index += 1
         context = torch.stack(context_data)
         context.to(DEVICE)
         targets = torch.stack(targets_data)
@@ -335,7 +332,7 @@ class GPTLanguageModel(nn.Module):
         """ generate tokens after  """
 
         # context is initally (1, BLOCK_SIZE) array of indices in the current context
-        while decode(context[0].tolist())[-1] != '"':
+        while context[0].tolist()[-1] != encode('"')[0]:
             # crop context to the last BLOCK_SIZE tokens
             context_crop = context[:, -BLOCK_SIZE:]
             # get the predictions
