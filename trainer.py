@@ -310,11 +310,9 @@ class GPTLanguageModel(nn.Module):
         data_index = 0
         while data_index < BATCH_SIZE:
             data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
-            if len(data) > data_batch + BLOCK_SIZE + 1:
-                if data[data_batch + BLOCK_SIZE + 1].tolist() != encode('\n')[0]:
-                    context_data.append(data[data_batch: data_batch + BLOCK_SIZE])
-                    targets_data.append(data[data_batch + 1: data_batch + BLOCK_SIZE + 1])
-                    data_index += 1
+            context_data.append(data[data_batch: data_batch + BLOCK_SIZE])
+            targets_data.append(data[data_batch + 1: data_batch + BLOCK_SIZE + 1])
+            data_index += 1
         context = torch.stack(context_data)
         context.to(DEVICE)
         targets = torch.stack(targets_data)
