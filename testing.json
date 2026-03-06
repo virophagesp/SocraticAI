@@ -47,6 +47,50 @@
     [
         "I don't know"
     ],
+    "what is love?",
+    [
+        "I don't know"
+    ],
+    "what is creativity?",
+    [
+        "I don't know"
+    ],
+    "what is knowledge?",
+    [
+        "I don't know"
+    ],
+    "what is pain?",
+    [
+        "I don't know"
+    ],
+    "what is desire?",
+    [
+        "I don't know"
+    ],
+    "what is passion?",
+    [
+        "I don't know"
+    ],
+    "what is rationality?",
+    [
+        "I don't know"
+    ],
+    "what is happiness?",
+    [
+        "I don't know"
+    ],
+    "what is importance?",
+    [
+        "I don't know"
+    ],
+    "what is purpose?",
+    [
+        "I don't know"
+    ],
+    "what is freewill?",
+    [
+        "I don't know"
+    ],
     "what is the meaning of life?",
     [
         "I don't know, could you explain the concept of meaning?",
@@ -105,6 +149,61 @@
     [
         "I don't know, could you explain the concept of meaning?",
         "I don't know, could you explain the concept of capablity?"
+    ],
+    "what is the meaning of love?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of love?"
+    ],
+    "what is the meaning of creativity?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of creativity?"
+    ],
+    "what is the meaning of knowledge?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+    "what is the meaning of pain?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of pain?"
+    ],
+    "what is the meaning of desire?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of desire?"
+    ],
+    "what is the meaning of passion?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of passion?"
+    ],
+    "what is the meaning of rationality?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of rationality?"
+    ],
+    "what is the meaning of happiness?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+    "what is the meaning of importance?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of importance?"
+    ],
+    "what is the meaning of purpose?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of purpose?"
+    ],
+    "what is the meaning of freewill?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of freewill?"
     ],
     "does life have meaning?",
     [
@@ -165,6 +264,61 @@
         "I don't know, could you explain the concept of meaning?",
         "I don't know, could you explain the concept of capablity?"
     ],
+    "does love have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of love?"
+    ],
+    "does creativity have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of creativity?"
+    ],
+    "does knowledge have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+    "does pain have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of pain?"
+    ],
+    "does desire have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of desire?"
+    ],
+    "does passion have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of passion?"
+    ],
+    "does rationality have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of rationality?"
+    ],
+    "does happiness have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+    "does importance have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of importance?"
+    ],
+    "does purpose have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of purpose?"
+    ],
+    "does freewill have meaning?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of freewill?"
+    ],
     "does life exist?",
     [
         "I don't know, could you explain the concept of existence?",
@@ -224,6 +378,61 @@
         "I don't know, could you explain the concept of existence?",
         "I don't know, could you explain the concept of capablity?"
     ],
+    "does love exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of love?"
+    ],
+    "does creativity exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of creativity?"
+    ],
+    "does knowledge exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+    "does pain exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of pain?"
+    ],
+    "does desire exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of desire?"
+    ],
+    "does passion exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of passion?"
+    ],
+    "does rationality exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of rationality?"
+    ],
+    "does happiness exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+    "does importance exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of importance?"
+    ],
+    "does purpose exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of purpose?"
+    ],
+    "does freewill exist?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of freewill?"
+    ],
     "what is the existence of life?",
     [
         "I don't know, could you explain the concept of existence?",
@@ -282,5 +491,60 @@
     [
         "I don't know, could you explain the concept of existence?",
         "I don't know, could you explain the concept of capablity?"
+    ],
+    "what is the existence of love?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of love?"
+    ],
+    "what is the existence of creativity?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of creativity?"
+    ],
+    "what is the existence of knowledge?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+    "what is the existence of pain?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of pain?"
+    ],
+    "what is the existence of desire?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of desire?"
+    ],
+    "what is the existence of passion?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of passion?"
+    ],
+    "what is the existence of rationality?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of rationality?"
+    ],
+    "what is the existence of happiness?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+    "what is the existence of importance?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of importance?"
+    ],
+    "what is the existence of purpose?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of purpose?"
+    ],
+    "what is the existence of freewill?",
+    [
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of freewill?"
     ]
 ]
