@@ -418,8 +418,6 @@ class GPTLanguageModel(nn.Module):
         # make sure there are not multiple newlines between separate sets of questions and answers
         while output_as_string[0] == '\n':
             output_as_string = output_as_string[1:]
-        while output_as_string[-1] == '\n':
-            output_as_string = output_as_string[:-1]
         while '\n\n' in output_as_string:
             output_as_string = output_as_string.replace('\n\n', '')
 
