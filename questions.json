@@ -229,36 +229,36 @@
     "When is it ok, if ever, to disobey the law?",
     [
         "I don't know, could you explain what should be wrong?",
-        "I don't know, could you explain what disobedience is?",
-        "I don't know, could you explain what the law is?"
+        "I don't know, could you explain the concept of disobedience?",
+        "I don't know, could you explain the concept of the law?"
     ],
 
     "Is it the main purpose of law to promote morality?",
     [
-        "I don't know, could you explain what purpose is?",
-        "I don't know, could you explain what the law is?",
-        "I don't know, could you explain what morality is?"
+        "I don't know, could you explain the concept of purpose?",
+        "I don't know, could you explain the concept of the law?",
+        "I don't know, could you explain the concept of morality?"
     ],
 
     "Should governments penalize people for unhealthy lifestyles?",
     [
-        "I don't know, could you explain what a government is?",
+        "I don't know, could you explain the concept of a government?",
         "I don't know, could you explain what things should be penalized?",
-        "I don't know, could you explain what a person is?",
-        "I don't know, could you explain what a lifestyle is?"
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of a lifestyle?"
     ],
 
     "Why ban drugs and not alcohol or trans-fat?",
     [
         "I don't know, could you explain what things should be banned?",
-        "I don't know, could you explain what a drug is?",
-        "I don't know, could you explain what alcohol is?",
-        "I don't know, could you explain what trans-fat is?"
+        "I don't know, could you explain the concept of a drug?",
+        "I don't know, could you explain the concept of alcohol?",
+        "I don't know, could you explain the concept of trans-fat?"
     ],
 
     "Should prostitution be made legal?",
     [
-        "I don't know, could you explain what prostitution is?",
+        "I don't know, could you explain the concept of prostitution?",
         "I don't know, could you explain what things should be legal?"
     ],
 
@@ -289,8 +289,8 @@
 
     "Why think there are universal human rights?",
     [
-        "I don't know, could you explain what a human is?",
-        "I don't know, could you explain what rights are?"
+        "I don't know, could you explain the concept of a human?",
+        "I don't know, could you explain the concept of rights?"
     ],
 
     "Is democracy the same as decision by the majority?",
@@ -304,7 +304,7 @@
     "Should people who pay more taxes get more votes?",
     [
         "I don't know, could you explain the concept of a person?",
-        "I don't know, could you explain what taxes are?",
+        "I don't know, could you explain the concept of taxes?",
         "I don't know, could you explain the concept of democracy?"
     ],
 
@@ -349,7 +349,7 @@
     "Should people have the right to live in any country they wish?",
     [
         "I don't know, could you explain the concept of a person?",
-        "I don't know, could you explain what rights are?",
+        "I don't know, could you explain the concept of rights?",
         "I don't know, could you explain the concept of a country?"
     ],
 
@@ -401,7 +401,7 @@
     "Do animals have rights?",
     [
         "I don't know, could you explain the concept of a animal?",
-        "I don't know, could you explain what rights are?"
+        "I don't know, could you explain the concept of rights?"
     ],
 
     "If we eat chickens, why not dogs, dolphins, or babies?",
@@ -442,33 +442,33 @@
         "I don't know, could you explain the concept of a coma?",
         "I don't know, could you explain the concept of a patient?",
         "I don't know, could you explain the concept of life?",
-        "I don't know, could you explain what resources are?"
+        "I don't know, could you explain the concept of resources?"
     ],
 
     "Should organ donation be made compulsory?",
     [
-        "I don't know, could you explain what a organ is?",
-        "I don't know, could you explain what donation is?",
+        "I don't know, could you explain the concept of a organ?",
+        "I don't know, could you explain the concept of donation?",
         "I don't know, could you explain what things should be compulsory?"
     ],
 
     "Should organ donors be financially compensated?",
     [
-        "I don't know, could you explain what a organ is?",
-        "I don't know, could you explain what a donor is?",
-        "I don't know, could you explain what finance is?",
+        "I don't know, could you explain the concept of a organ?",
+        "I don't know, could you explain the concept of a donor?",
+        "I don't know, could you explain the concept of finance?",
         "I don't know, could you explain what things should be compensated?"
     ],
 
     "Is it wrong to grow brain dead babies to harvest their organs?",
     [
         "I don't know, could you explain what should be wrong?",
-        "I don't know, could you explain what growth is?",
-        "I don't know, could you explain what a brain is?",
-        "I don't know, could you explain what death is?",
-        "I don't know, could you explain what a baby is?",
-        "I don't know, could you explain what harvesting is?",
-        "I don't know, could you explain what a organ is?"
+        "I don't know, could you explain the concept of growth?",
+        "I don't know, could you explain the concept of a brain?",
+        "I don't know, could you explain the concept of death?",
+        "I don't know, could you explain the concept of a baby?",
+        "I don't know, could you explain the concept of harvesting?",
+        "I don't know, could you explain the concept of a organ?"
     ],
 
     "Why should we respect the dead?",
@@ -779,14 +779,14 @@
 
     "Where do emotions come from?",
     [
-        "I don't know, could you explain the concept of emotions are?",
-        "I don't know, could you explain the concept of a origin is?"
+        "I don't know, could you explain the concept of emotions?",
+        "I don't know, could you explain the concept of a origin?"
     ],
 
     "Can we choose our emotions or do they just happen?",
     [
-        "I don't know, could you explain the concept of a choice is?",
-        "I don't know, could you explain what emotions are?"
+        "I don't know, could you explain the concept of a choice?",
+        "I don't know, could you explain the concept of emotions?"
     ],
 
     "At what age are children held accountable for their actions? How do you determine that?",
@@ -2185,7 +2185,7 @@
     [
         "I don't know, could you explain the concept of a gadget?",
         "I don't know, could you explain the concept of a app?",
-        "I don't know, could you explain what emotions are?"
+        "I don't know, could you explain the concept of emotions?"
     ],
 
     "Does observation alter an event?",
@@ -2747,7 +2747,7 @@
     [
         "I don't know, could you explain the concept of access?",
         "I don't know, could you explain the concept of the internet?",
-        "I don't know, could you explain what rights are?"
+        "I don't know, could you explain the concept of rights?"
     ],
 
     "Is peace the only way to stop a war?",
