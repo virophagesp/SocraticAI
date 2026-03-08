@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 import pickle
 import json
+import gc
 
 # These constants are the hyperparameters
 # The batch size is how many independent sequences will we process in parallel
@@ -458,6 +459,9 @@ def training_function():
         optimizer.zero_grad(set_to_none=True)
         model_loss.backward()
         optimizer.step()
+
+    del optimizer
+    gc.collect()
 
     # estimate the loss of the final model
     model.estimate_loss(MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
