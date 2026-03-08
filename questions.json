@@ -2917,5 +2917,1468 @@
         "I don't know, could you explain the concept of technology?",
         "I don't know, could you explain the concept of a advance?",
         "I don't know, could you explain the concept of humanity?"
+    ],
+
+    "If you could change one event from your past, what would it be and why?",
+    [
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of a event?"
+    ],
+
+    "What's more important to you, truth or happiness, and why?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of truth?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "What's your take on destiny? Do you believe in it?",
+    [
+        "I don't know, could you explain the concept of destiny?",
+        "I don't know, could you explain the concept of belief?"
+    ],
+
+    "What does a perfect world look like to you?",
+    [
+        "I don't know, could you explain the concept of perfection?",
+        "I don't know, could you explain the concept of a world?"
+    ],
+
+    "If you could gain any one quality or ability, what would it be?",
+    [
+        "I don't know, could you explain the concept of gain?",
+        "I don't know, could you explain the concept of quality?",
+        "I don't know, could you explain the concept of a ability?"
+    ],
+
+    "Is it possible to live a normal life and not ever tell a lie?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of normal?",
+        "I don't know, could you explain the concept of a lie?"
+    ],
+
+    "What do you think is the purpose of your life?",
+    [
+        "I don't know, could you explain the concept of purpose?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What do you value more, intelligence or wisdom, and why?",
+    [
+        "I don't know, could you explain the concept of value?",
+        "I don't know, could you explain the concept of intelligence?",
+        "I don't know, could you explain the concept of wisdom?"
+    ],
+
+    "Is it always better to know, or are there things better left unknown?",
+    [
+        "I don't know, could you explain the concept of knowledge?",
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of unknown?"
+    ],
+
+    "Do you believe that people have inherent worth? Why or why not?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of inherence?",
+        "I don't know, could you explain the concept of worth?"
+    ],
+
+    "What do you think would make you a better person?",
+    [
+        "I don't know, could you explain the concept of a person?"
+    ],
+
+    "Do you think all individuals should be equal? Why or why not?",
+    [
+        "I don't know, could you explain the concept of a individual?",
+        "I don't know, could you explain the concept of equality?"
+    ],
+
+    "How do you define freedom? Do you feel like you have it?",
+    [
+        "I don't know, could you explain the concept of definition?",
+        "I don't know, could you explain the concept of freedom?",
+        "I don't know, could you explain the concept of feeling?"
+    ],
+
+    "Is it more important to be respected or liked?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of respect?"
+    ],
+
+    "What is the best way for a person to attain happiness?",
+    [
+        "I don't know, could you explain the concept of a individual?",
+        "I don't know, could you explain the concept of equality?"
+    ],
+
+    "Do you think every life has an equal value?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of equality?",
+        "I don't know, could you explain the concept of value?"
+    ],
+
+    "What do you think stands between you and complete happiness?",
+    [
+        "I don't know, could you explain the concept of completeness?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "What does success mean to you?",
+    [
+        "I don't know, could you explain the concept of success?",
+        "I don't know, could you explain the concept of meaning?"
+    ],
+
+    "What do you believe stands at the end of the universe?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of a end?",
+        "I don't know, could you explain the concept of a universe?"
+    ],
+
+    "If there were no laws or rules for one day, what would you do?",
+    [
+        "I don't know, could you explain the concept of a law?",
+        "I don't know, could you explain the concept of a rule?",
+        "I don't know, could you explain the concept of a day?"
+    ],
+
+    "Is suffering a necessary part of the human condition?",
+    [
+        "I don't know, could you explain the concept of suffering?",
+        "I don't know, could you explain the concept of a human?",
+        "I don't know, could you explain the concept of a condition?"
+    ],
+
+    "What motivates you to wake up every morning?",
+    [
+        "I don't know, could you explain the concept of motivation?",
+        "I don't know, could you explain the concept of a morning?"
+    ],
+
+    "What do you believe happens after death?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of death?"
+    ],
+
+    "Is the concept of \"you\" continuous or does past \"you\" continually die and be replaced by a new \"you\"?",
+    [
+        "I don't know, could you explain the concept of \"you\"?",
+        "I don't know, could you explain the concept of continuity?",
+        "I don't know, could you explain the concept of death?"
+    ],
+
+    "What does it mean to live a good life?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of goodness?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "How do you define 'life'?",
+    [
+        "I don't know, could you explain the concept of definition?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Why do you think we're here? Is there a meaning for life?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "If life is so short, why do we do so many things we don't like and like so many things we don't do?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of a thing?"
+    ],
+
+    "Does hardship make a person stronger? If so, under what conditions and at what point is it too much hardship?",
+    [
+        "I don't know, could you explain the concept of hardship?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of strength?",
+        "I don't know, could you explain the concept of a condition?"
+    ],
+
+    "Do you think life is fair? Why or why not?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of fair?"
+    ],
+
+    "Do you believe there is a reason for everything that happens in your life?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of reason?",
+        "I don't know, could you explain the concept of everything?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What is the role of free will in life?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of free-will?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What is the most meaningful accomplishment of your life so far?",
+    [
+        "I don't know, could you explain the concept of meaning?",
+        "I don't know, could you explain the concept of a accomplishment?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Do all living creatures have an equal value?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of a creature?",
+        "I don't know, could you explain the concept of equality?",
+        "I don't know, could you explain the concept of value?"
+    ],
+
+    "Is life all about survival of the fittest or cooperation and alliances?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of survival?",
+        "I don't know, could you explain the concept of cooperation?",
+        "I don't know, could you explain the concept of a alliance?"
+    ],
+
+    "What, in your opinion, is the key to a fulfilling life?",
+    [
+        "I don't know, could you explain the concept of a opinion?",
+        "I don't know, could you explain the concept of a key?",
+        "I don't know, could you explain the concept of fulfillment?",
+        "I don't know, could you explain the concept of motivation?"
+    ],
+
+    "If happiness was the national currency, what kind of work would make you rich?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a nation?",
+        "I don't know, could you explain the concept of currency?",
+        "I don't know, could you explain the concept of work?",
+        "I don't know, could you explain the concept of rich?"
+    ],
+
+    "If life had no risks, would it still be worth living?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of a risk?",
+        "I don't know, could you explain the concept of worth?"
+    ],
+
+    "What do you think is more important, to be remembered or to leave a legacy behind?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of memory?",
+        "I don't know, could you explain the concept of a legacy?"
+    ],
+
+    "What do you want to achieve in your lifetime?",
+    [
+        "I don't know, could you explain the concept of achievement?",
+        "I don't know, could you explain the concept of a lifetime?"
+    ],
+
+    "How do you measure the success of a life spent well?",
+    [
+        "I don't know, could you explain the concept of measurement?",
+        "I don't know, could you explain the concept of success?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What's one thing you'd like to change about the world?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of the world?"
+    ],
+
+    "If you could be given the date of your death, would you want to know?",
+    [
+        "I don't know, could you explain the concept of a date?",
+        "I don't know, could you explain the concept of death?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+
+    "What's something that you believe in that not everyone else does?",
+    [
+        "I don't know, could you explain the concept of something?",
+        "I don't know, could you explain the concept of belief?"
+    ],
+
+    "Is struggle necessary for success in life?",
+    [
+        "I don't know, could you explain the concept of struggle?",
+        "I don't know, could you explain the concept of success?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Do you believe in living each day as if it was your last? Why or why not?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of a day?"
+    ],
+
+    "What makes life truly worth living?",
+    [
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of worth?"
+    ],
+
+    "Is there a set path for everyone's life or do we make our own?",
+    [
+        "I don't know, could you explain the concept of a path?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What is your definition of happiness?",
+    [
+        "I don't know, could you explain the concept of definition?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Do you think happiness is a state of mind?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a state?",
+        "I don't know, could you explain the concept of a mind?"
+    ],
+
+    "Is there a formula for happiness?",
+    [
+        "I don't know, could you explain the concept of a formula?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Can money buy happiness? Why or why not?",
+    [
+        "I don't know, could you explain the concept of money?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Do you believe in 'happily ever after'?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Is happiness a choice?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a choice?"
+    ],
+
+    "Do you think we have a moral obligation to be happy?",
+    [
+        "I don't know, could you explain the concept of morality?",
+        "I don't know, could you explain the concept of a obligation?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "What do you think is the biggest barrier to happiness?",
+    [
+        "I don't know, could you explain the concept of a barrier?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Can you be happy without freedom? Why or why not?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of freedom?"
+    ],
+
+    "Is personal happiness the ultimate purpose of life?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of ultimate?",
+        "I don't know, could you explain the concept of purpose?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Do you believe that suffering is a part of the path to happiness?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of suffering?",
+        "I don't know, could you explain the concept of a path?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Can one be happy without friends?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a friend?"
+    ],
+
+    "Do you think achieving goals is essential for happiness?",
+    [
+        "I don't know, could you explain the concept of achieving?",
+        "I don't know, could you explain the concept of a goal?",
+        "I don't know, could you explain the concept of essentialness?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "How important is happiness in a successful relationship?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of success?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "What role does luck play in happiness?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of luck?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Is it possible to be happy without fulfilling your potential?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of fulfillment?",
+        "I don't know, could you explain the concept of potential?"
+    ],
+
+    "Is it better to be a happy fool or a tormented genius?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a fool?",
+        "I don't know, could you explain the concept of torment?",
+        "I don't know, could you explain the concept of a genius?"
+    ],
+
+    "Can happiness exist without sadness?",
+    [
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of sadness?"
+    ],
+
+    "What do you think is the link between morality and happiness?",
+    [
+        "I don't know, could you explain the concept of a link?",
+        "I don't know, could you explain the concept of morality?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Do you think there's a limit to how happy a person can be?",
+    [
+        "I don't know, could you explain the concept of a limit?",
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of a person?"
+    ],
+
+    "Is there a difference between joy and happiness?",
+    [
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of joy?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Do you believe that everyone deserves to be happy?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of deserving?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "Can one be truly happy if they're living a lie?",
+    [
+        "I don't know, could you explain the concept of truth?",
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of life?",
+        "I don't know, could you explain the concept of a lie?"
+    ],
+
+    "Do you think animals experience happiness? How might it be different or similar to human happiness?",
+    [
+        "I don't know, could you explain the concept of a animal?",
+        "I don't know, could you explain the concept of experience?",
+        "I don't know, could you explain the concept of happiness?",
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of similarity?",
+        "I don't know, could you explain the concept of a human?"
+    ],
+
+    "What's the one thing that always brings you happiness, no matter what?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "How do you define love?",
+    [
+        "I don't know, could you explain the concept of definition?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "Is there such a thing as 'the one', or can we love multiple people in our lives?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of multiple?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Do you believe in love at first sight?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of sight?"
+    ],
+
+    "Can love exist without hate?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of hate?"
+    ],
+
+    "Do you think love can last forever?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of forever?"
+    ],
+
+    "Is love a feeling or a choice?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of a feeling?",
+        "I don't know, could you explain the concept of a choice?"
+    ],
+
+    "Is unconditional love a real thing, or does every love have conditions?",
+    [
+        "I don't know, could you explain the concept of a condition?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of realness?",
+        "I don't know, could you explain the concept of a thing?"
+    ],
+
+    "What role does love play in your life?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Can you love someone you don't respect?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of respect?"
+    ],
+
+    "How important is romantic love in a life well-lived?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of romance?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Can you love someone without liking them?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of someone?"
+    ],
+
+    "Is self-love more important than loving others?",
+    [
+        "I don't know, could you explain the concept of self-love?",
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "Do you believe in soulmates?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of a soulmate?"
+    ],
+
+    "Can love and lust coexist in a relationship?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of lust?",
+        "I don't know, could you explain the concept of coexistence?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can you be in love with two people at the same time?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of time?"
+    ],
+
+    "Is there a difference between loving someone and being in love with someone?",
+    [
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of someone?"
+    ],
+
+    "Can love change a person?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of a person?"
+    ],
+
+    "What is more important in a relationship - love or compatibility?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of compatibility?"
+    ],
+
+    "Can love conquer all?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of conquering?"
+    ],
+
+    "Is it possible to fall out of love?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of falling?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "Is jealousy a sign of love or lack of trust?",
+    [
+        "I don't know, could you explain the concept of jealousy?",
+        "I don't know, could you explain the concept of a sign?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of a lack?",
+        "I don't know, could you explain the concept of trust?"
+    ],
+
+    "Can love be measured?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of measurement?"
+    ],
+
+    "Do you think everyone has a capacity for love?",
+    [
+        "I don't know, could you explain the concept of capacity?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "Can you truly love someone if you don't love yourself?",
+    [
+        "I don't know, could you explain the concept of truth?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "What qualities do you value most in a friend?",
+    [
+        "I don't know, could you explain the concept of a quality?",
+        "I don't know, could you explain the concept of value?",
+        "I don't know, could you explain the concept of a friend?"
+    ],
+
+    "Can a person be friends with someone they are attracted to?",
+    [
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of attraction?"
+    ],
+
+    "What does it mean to be a good friend?",
+    [
+        "I don't know, could you explain the concept of good?",
+        "I don't know, could you explain the concept of a friend?"
+    ],
+
+    "Can friends ever become family?",
+    [
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of becoming?",
+        "I don't know, could you explain the concept of family?"
+    ],
+
+    "How important is it to have friends who are different from you?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of difference?"
+    ],
+
+    "Can you be best friends with your significant other?",
+    [
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of significance?"
+    ],
+
+    "Is it possible to have a true friendship without any disagreements?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of truth?",
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of a disagreement?"
+    ],
+
+    "Can you still be friends with someone if your values drastically differ?",
+    [
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of a value?",
+        "I don't know, could you explain the concept of difference?"
+    ],
+
+    "Does having common interests play a significant role in friendships?",
+    [
+        "I don't know, could you explain the concept of commonness?",
+        "I don't know, could you explain the concept of a interest?",
+        "I don't know, could you explain the concept of significance?",
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of a friendship?"
+    ],
+
+    "Do you think friendships change as we age? How so?",
+    [
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of change?"
+    ],
+
+    "How would you define the difference between a friend and an acquaintance?",
+    [
+        "I don't know, could you explain the concept of definition?",
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of a acquaintance?"
+    ],
+
+    "Can a person have too many friends?",
+    [
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of a friend?"
+    ],
+
+    "Is it more important to have a few close friends or a wide circle of acquaintances?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of a circle?",
+        "I don't know, could you explain the concept of a acquaintance?"
+    ],
+
+    "Is it possible to truly forgive a friend who has betrayed you?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of truth?",
+        "I don't know, could you explain the concept of forgiveness?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of betrayal?"
+    ],
+
+    "Can friendships be ranked or categorized?",
+    [
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of ranked?",
+        "I don't know, could you explain the concept of categorized?"
+    ],
+
+    "Is there a point at which a friendship becomes unhealthy?",
+    [
+        "I don't know, could you explain the concept of a point?",
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of unhealthy?"
+    ],
+
+    "What role do friendships play in your life?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Is there such a thing as love between friends?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of a friend?"
+    ],
+
+    "Do you believe in the concept of a 'friendship soulmate'?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of friendship?",
+        "I don't know, could you explain the concept of a soulmate?"
+    ],
+
+    "Will distance always end a friendship?",
+    [
+        "I don't know, could you explain the concept of distance?",
+        "I don't know, could you explain the concept of a end?",
+        "I don't know, could you explain the concept of a friendship?"
+    ],
+
+    "Is it possible to be friends with an ex?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of a ex?"
+    ],
+
+    "Do you think there's a difference between childhood friends and friends made later in life?",
+    [
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of childhood?",
+        "I don't know, could you explain the concept of a friend?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "Do you think social media has affected the way we form friendships?",
+    [
+        "I don't know, could you explain the concept of social-media?",
+        "I don't know, could you explain the concept of affecting?",
+        "I don't know, could you explain the concept of a way?",
+        "I don't know, could you explain the concept of forming?",
+        "I don't know, could you explain the concept of a friendship?"
+    ],
+
+    "Can friendship survive a major disagreement or fight?",
+    [
+        "I don't know, could you explain the concept of a friendship?",
+        "I don't know, could you explain the concept of survival?",
+        "I don't know, could you explain the concept of a disagreement?",
+        "I don't know, could you explain the concept of a fight?"
+    ],
+
+    "What does a healthy relationship look like to you?",
+    [
+        "I don't know, could you explain the concept of healthy?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can a relationship survive without trust?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of survival?",
+        "I don't know, could you explain the concept of trust?"
+    ],
+
+    "Is it possible to change someone in a relationship?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How much does physical attraction matter in a relationship?",
+    [
+        "I don't know, could you explain the concept of physical?",
+        "I don't know, could you explain the concept of attraction?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How important is compromise in a relationship?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a compromise?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can a relationship work if the partners have vastly different backgrounds?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of a partner?",
+        "I don't know, could you explain the concept of difference?",
+        "I don't know, could you explain the concept of a background?"
+    ],
+
+    "Do opposites really attract or is it just a myth?",
+    [
+        "I don't know, could you explain the concept of opposite?",
+        "I don't know, could you explain the concept of attraction?",
+        "I don't know, could you explain the concept of a myth?"
+    ],
+
+    "Is there such a thing as a perfect relationship?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of perfection?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can there be love without respect in a relationship?",
+    [
+        "I don't know, could you explain the concept of love?",
+        "I don't know, could you explain the concept of respect?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can a relationship last without shared goals?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of sharing?",
+        "I don't know, could you explain the concept of a goal?"
+    ],
+
+    "How do power dynamics influence relationships?",
+    [
+        "I don't know, could you explain the concept of power?",
+        "I don't know, could you explain the concept of a dynamic?",
+        "I don't know, could you explain the concept of influence?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Is it better to be single and content or in a bland relationship?",
+    [
+        "I don't know, could you explain the concept of single?",
+        "I don't know, could you explain the concept of content?",
+        "I don't know, could you explain the concept of bland?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How much should you sacrifice for your partner in a relationship?",
+    [
+        "I don't know, could you explain the concept of sacrifice?",
+        "I don't know, could you explain the concept of a partner?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How important is it for your partner to share your interests?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a partner?",
+        "I don't know, could you explain the concept of a interest?"
+    ],
+
+    "Can a relationship survive major ideological differences?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of survival?",
+        "I don't know, could you explain the concept of ideology?",
+        "I don't know, could you explain the concept of a difference?"
+    ],
+
+    "Do you think all relationships are destined to become routine over time?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of destiny?",
+        "I don't know, could you explain the concept of routine?",
+        "I don't know, could you explain the concept of time?"
+    ],
+
+    "How much does communication impact a relationship?",
+    [
+        "I don't know, could you explain the concept of communication?",
+        "I don't know, could you explain the concept of impact?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can a relationship exist without love?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of existence?",
+        "I don't know, could you explain the concept of love?"
+    ],
+
+    "How important is equality in a relationship?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of equality?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Can a relationship recover from a serious betrayal?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of recovery?",
+        "I don't know, could you explain the concept of serious?",
+        "I don't know, could you explain the concept of a betrayal?"
+    ],
+
+    "How important is it to know yourself before getting into a relationship?",
+    [
+        "I don't know, could you explain the concept of importance?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How do your relationships shape your identity?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of identity?"
+    ],
+
+    "Is it possible to maintain individuality in a relationship?",
+    [
+        "I don't know, could you explain what things should be possible?",
+        "I don't know, could you explain the concept of individuality?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "How have social media influenced our relationships?",
+    [
+        "I don't know, could you explain the concept of social-media?",
+        "I don't know, could you explain the concept of influence?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Is being in a relationship necessary for happiness?",
+    [
+        "I don't know, could you explain the concept of a relationship?",
+        "I don't know, could you explain the concept of necessity?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "What kind of person do you think I am?",
+    [
+        "I don't know, could you explain the concept of a person?"
+    ],
+
+    "How do you think I handle stress?",
+    [
+        "I don't know, could you explain the concept of stress?"
+    ],
+
+    "What's one thing you admire about me?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of admire?"
+    ],
+
+    "If you had to describe me in one word, what would it be?",
+    [
+        "I don't know, could you explain the concept of description?",
+        "I don't know, could you explain the concept of a word?"
+    ],
+
+    "What do you think is my greatest strength?",
+    [
+        "I don't know, could you explain the concept of strength?"
+    ],
+
+    "What do you believe is my biggest weakness?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of weakness?"
+    ],
+
+    "How do you think I can become a better person?",
+    [
+        "I don't know, could you explain the concept of becoming?",
+        "I don't know, could you explain the concept of a person?"
+    ],
+
+    "What's something I do that you wish you could do too?",
+    [
+        "I don't know, could you explain the concept of something?"
+    ],
+
+    "How do you think I perceive the world?",
+    [
+        "I don't know, could you explain the concept of perception?",
+        "I don't know, could you explain the concept of the world?"
+    ],
+
+    "What is one characteristic you think defines me?",
+    [
+        "I don't know, could you explain the concept of a characteristic?",
+        "I don't know, could you explain the concept of definition?"
+    ],
+
+    "What's the most significant change you've noticed in me over the years?",
+    [
+        "I don't know, could you explain the concept of significance?",
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of noticing?",
+        "I don't know, could you explain the concept of a year?"
+    ],
+
+    "How do you think I handle criticism?",
+    [
+        "I don't know, could you explain the concept of handling?",
+        "I don't know, could you explain the concept of criticism?"
+    ],
+
+    "What kind of influence do you think I have on others?",
+    [
+        "I don't know, could you explain the concept of influence?"
+    ],
+
+    "If you were in my shoes, what would you do differently?",
+    [
+        "I don't know, could you explain the concept of a shoe?",
+        "I don't know, could you explain the concept of difference?"
+    ],
+
+    "How do you think I handle conflicts?",
+    [
+        "I don't know, could you explain the concept of handling?",
+        "I don't know, could you explain the concept of a conflict?"
+    ],
+
+    "What do you believe motivates me the most?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of motivation?"
+    ],
+
+    "How do you think I deal with change?",
+    [
+        "I don't know, could you explain the concept of dealing?",
+        "I don't know, could you explain the concept of change?"
+    ],
+
+    "What's one thing you think I should let go of?",
+    [
+        "I don't know, could you explain the concept of a thing?"
+    ],
+
+    "Do you think I'm more of a dreamer or a realist?",
+    [
+        "I don't know, could you explain the concept of a dreamer?",
+        "I don't know, could you explain the concept of a realist?"
+    ],
+
+    "If you had to guess, what do you think keeps me up at night?",
+    [
+        "I don't know, could you explain the concept of guessing?",
+        "I don't know, could you explain the concept of night?"
+    ],
+
+    "How do you think I would handle a major setback in life?",
+    [
+        "I don't know, could you explain the concept of handling?",
+        "I don't know, could you explain the concept of a setback?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "What do you think is my greatest fear?",
+    [
+        "I don't know, could you explain the concept of fear?"
+    ],
+
+    "How do you think I react to new experiences?",
+    [
+        "I don't know, could you explain the concept of reaction?",
+        "I don't know, could you explain the concept of new?",
+        "I don't know, could you explain the concept of a experience?"
+    ],
+
+    "What's one thing you believe I should do more of?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of belief?"
+    ],
+
+    "If you could give me one piece of advice, what would it be?",
+    [
+        "I don't know, could you explain the concept of a piece?",
+        "I don't know, could you explain the concept of advice?"
+    ],
+
+    "Do you believe in fate, or do you think we create our own futures?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of fate?",
+        "I don't know, could you explain the concept of a future?"
+    ],
+
+    "How much of your day is spent thinking about the future?",
+    [
+        "I don't know, could you explain the concept of a day?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "If you could see into your future, would you want to?",
+    [
+        "I don't know, could you explain the concept of a future?"
+    ],
+
+    "What's one thing you hope to achieve in the future?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of achievement?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "How do you imagine the world 50 years from now?",
+    [
+        "I don't know, could you explain the concept of imagination?",
+        "I don't know, could you explain the concept of the world?",
+        "I don't know, could you explain the concept of a year?",
+        "I don't know, could you explain the concept of now?"
+    ],
+
+    "Do you think technology will save us or doom us in the future?",
+    [
+        "I don't know, could you explain the concept of technology?",
+        "I don't know, could you explain the concept of saving?",
+        "I don't know, could you explain the concept of doom?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "What role does planning for the future play in your life?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of planning?",
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of life?"
+    ],
+
+    "How do you feel about the concept of time travel?",
+    [
+        "I don't know, could you explain the concept of feeling?",
+        "I don't know, could you explain the concept of time?",
+        "I don't know, could you explain the concept of travel?",
+        "I don't know, could you explain the concept of time-travel?"
+    ],
+
+    "How do you prepare for your future?",
+    [
+        "I don't know, could you explain the concept of preparation?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "What's the biggest challenge you think our future generations will face?",
+    [
+        "I don't know, could you explain the concept of a challenge?",
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of a generation?"
+    ],
+
+    "What are your fears about the future?",
+    [
+        "I don't know, could you explain the concept of a fear?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "Do you believe in the concept of a utopian future?",
+    [
+        "I don't know, could you explain the concept of belief?",
+        "I don't know, could you explain the concept of utopia?",
+        "I don't know, could you explain the concept of a future?"
+    ],
+
+    "What role will AI play in our future?",
+    [
+        "I don't know, could you explain the concept of a role?",
+        "I don't know, could you explain the concept of AI?",
+        "I don't know, could you explain the concept of a future?"
+    ],
+
+    "How much can our actions today impact our future?",
+    [
+        "I don't know, could you explain the concept of a action?",
+        "I don't know, could you explain the concept of today?",
+        "I don't know, could you explain the concept of impact?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "Do you think human nature will fundamentally change in the future?",
+    [
+        "I don't know, could you explain the concept of a human?",
+        "I don't know, could you explain the concept of nature?",
+        "I don't know, could you explain the concept of fundamental?",
+        "I don't know, could you explain the concept of change?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "What does your ideal future look like?",
+    [
+        "I don't know, could you explain the concept of ideal?",
+        "I don't know, could you explain the concept of a future?"
+    ],
+
+    "What do you think is the future of human relationships?",
+    [
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of a human?",
+        "I don't know, could you explain the concept of a relationship?"
+    ],
+
+    "Do you worry more about the future or the present?",
+    [
+        "I don't know, could you explain the concept of worry?",
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of the present?"
+    ],
+
+    "Do you think the future is predetermined or malleable?",
+    [
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of predetermination?",
+        "I don't know, could you explain the concept of malleability?"
+    ],
+
+    "What's your philosophy on aging and the future?",
+    [
+        "I don't know, could you explain the concept of philosophy?",
+        "I don't know, could you explain the concept of aging?",
+        "I don't know, could you explain the concept of the future?"
+    ],
+
+    "How do you think climate change will affect our future?",
+    [
+        "I don't know, could you explain the concept of climate-change?",
+        "I don't know, could you explain the concept of affecting?",
+        "I don't know, could you explain the concept of future?"
+    ],
+
+    "What's the one thing you'd like to see happen in your lifetime?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of a lifetime?"
+    ],
+
+    "How do you envision the future of work?",
+    [
+        "I don't know, could you explain the concept of envisioning?",
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of work?"
+    ],
+
+    "Do you think future generations will be happier or less happy than us?",
+    [
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of a generation?",
+        "I don't know, could you explain the concept of happiness?"
+    ],
+
+    "If you could leave one thing for future generations, what would it be?",
+    [
+        "I don't know, could you explain the concept of a thing?",
+        "I don't know, could you explain the concept of the future?",
+        "I don't know, could you explain the concept of a generation?"
+    ],
+
+    "If two mind-reading people read each other's minds, whose mind are they reading?",
+    [
+        "I don't know, could you explain the concept of mind-reading?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of reading?",
+        "I don't know, could you explain the concept of a mind?"
+    ],
+
+    "Can you daydream at night?",
+    [
+        "I don't know, could you explain the concept of a daydream?",
+        "I don't know, could you explain the concept of night?"
+    ],
+
+    "If nothing sticks to Teflon, how does Teflon stick to the pan?",
+    [
+        "I don't know, could you explain the concept of nothing?",
+        "I don't know, could you explain the concept of sticking?",
+        "I don't know, could you explain the concept of Teflon?",
+        "I don't know, could you explain the concept of a pan?"
+    ],
+
+    "If you try to fail, and succeed, which have you done?",
+    [
+        "I don't know, could you explain the concept of trying?",
+        "I don't know, could you explain the concept of failure?",
+        "I don't know, could you explain the concept of succeess?"
+    ],
+
+    "How far east can you go before you're heading west?",
+    [
+        "I don't know, could you explain the concept of far?",
+        "I don't know, could you explain the concept of east?",
+        "I don't know, could you explain the concept of heading?",
+        "I don't know, could you explain the concept of west?"
+    ],
+
+    "Do stairs go up or down?",
+    [
+        "I don't know, could you explain the concept of a stair?",
+        "I don't know, could you explain the concept of going?",
+        "I don't know, could you explain the concept of up?",
+        "I don't know, could you explain the concept of down?"
+    ],
+
+    "If you're in a competition by yourself, do you come in first or last?",
+    [
+        "I don't know, could you explain the concept of a competition?",
+        "I don't know, could you explain the concept of first?",
+        "I don't know, could you explain the concept of last?"
+    ],
+
+    "If you clean a vacuum cleaner, do you become a vacuum cleaner?",
+    [
+        "I don't know, could you explain the concept of cleaning?",
+        "I don't know, could you explain the concept of a vacuum-cleaner?"
+    ],
+
+    "Why do we park on driveways and drive on parkways?",
+    [
+        "I don't know, could you explain the concept of parking?",
+        "I don't know, could you explain the concept of a driveway?",
+        "I don't know, could you explain the concept of driving?",
+        "I don't know, could you explain the concept of a parkway?"
+    ],
+
+    "If you're waiting for the waiter, aren't you the waiter?",
+    [
+        "I don't know, could you explain the concept of waiting?",
+        "I don't know, could you explain the concept of a waiter?"
+    ],
+
+    "Why are buildings called buildings if they're already built?",
+    [
+        "I don't know, could you explain the concept of building?",
+        "I don't know, could you explain the concept of a building?",
+        "I don't know, could you explain the concept of built?"
+    ],
+
+    "Why do noses run and feet smell?",
+    [
+        "I don't know, could you explain the concept of a nose?",
+        "I don't know, could you explain the concept of running?",
+        "I don't know, could you explain the concept of a foot?",
+        "I don't know, could you explain the concept of smell?"
+    ],
+
+    "If a word is misspelled in the dictionary, how would we ever know?",
+    [
+        "I don't know, could you explain the concept of a word?",
+        "I don't know, could you explain the concept of misspelling?",
+        "I don't know, could you explain the concept of the dictionary?",
+        "I don't know, could you explain the concept of knowledge?"
+    ],
+
+    "Why is it called a TV \"set\" when you only get one?",
+    [
+        "I don't know, could you explain the concept of a TV?",
+        "I don't know, could you explain the concept of a set?"
+    ],
+
+    "Why is quicksand slow?",
+    [
+        "I don't know, could you explain the concept of quicksand?",
+        "I don't know, could you explain the concept of slow?"
+    ],
+
+    "If you draw a blank, what does it look like?",
+    [
+        "I don't know, could you explain the concept of drawing?",
+        "I don't know, could you explain the concept of blank?"
+    ],
+
+    "Can a short person \"talk down\" to a taller person?",
+    [
+        "I don't know, could you explain the concept of short?",
+        "I don't know, could you explain the concept of a person?",
+        "I don't know, could you explain the concept of talking-down?",
+        "I don't know, could you explain the concept of tall?"
     ]
 ]
