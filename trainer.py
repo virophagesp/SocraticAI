@@ -9,9 +9,9 @@ import gc
 # The batch size is how many independent sequences will we process in parallel
 BATCH_SIZE = 64
 # The maximum context length for predictions
-BLOCK_SIZE = 128
+BLOCK_SIZE = 256
 # Maximum interations of training
-MAX_ITERS = 3000
+MAX_ITERS = 2000
 # Beginning model's amount of iterations
 BEGIN_INTERATIONS = 0
 # Every 100 iterations of training, print loss and save stage
