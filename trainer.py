@@ -81,14 +81,6 @@ def print_and_write_to_file(string_input):
     testing_file.write(f'{string_input}\n')
 
 
-# Ask user if they want to retrain the models
-mode = input('retrain the models (y/n): ').lower()
-testing_file.write(f'retrain the models (y/n): {mode}\n')
-if (mode == 'y'):
-    mode = 'training'
-else:
-    mode = 'None'
-
 # Manually set seed for ai for consistent results during testing and such
 torch.manual_seed(1337)
 
@@ -426,9 +418,12 @@ class GPTLanguageModel(nn.Module):
         print_and_write_to_file(output_as_string)
 
 
-def training_function():
-    """ train the model """
+# Ask user if they want to retrain the models
+mode = input('retrain the models (y/n): ').lower()
+testing_file.write(f'retrain the models (y/n): {mode}\n')
 
+# train the model
+if mode == 'y':
     # index for stages
     model_index = int(BEGIN_INTERATIONS/EVAL_INTERVAL)
 
@@ -460,27 +455,19 @@ def training_function():
         model_loss.backward()
         optimizer.step()
 
-    del optimizer
-    gc.collect()
-
     # estimate the loss of the final model
     model.estimate_loss(MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
 
-
-if mode == 'training':
-    # train the model
-    training_function()
+    del model
+    del optimizer
+    gc.collect()
 
 # ask user if they want to test the models
 mode = input('test the models (y/n): ').lower()
 testing_file.write(f'test the models (y/n): {mode}\n')
-if (mode == 'y'):
-    mode = 'testing'
-else:
-    mode = 'None'
 
 # input question from user for only last model
-if mode != 'testing':
+if mode != 'y':
     # load model
     with open(f'model{int(MAX_ITERS/EVAL_INTERVAL)}.pkl', 'rb') as f:
         model = pickle.load(f)
