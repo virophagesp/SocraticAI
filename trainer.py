@@ -4,6 +4,7 @@ from torch.nn import functional as F
 import pickle
 import json
 import gc
+import ctypes
 
 # These constants are the hyperparameters
 # The batch size is how many independent sequences will we process in parallel
@@ -418,6 +419,12 @@ class GPTLanguageModel(nn.Module):
         print_and_write_to_file(output_as_string)
 
 
+# free torch memory usage on cpu mode after training done
+def trim_memory():
+  libc = ctypes.CDLL("libc.so.6")
+  return libc.malloc_trim(0)
+
+
 # Ask user if they want to retrain the models
 mode = input('retrain the models (y/n): ').lower()
 testing_file.write(f'retrain the models (y/n): {mode}\n')
@@ -461,6 +468,8 @@ if mode == 'y':
     del model
     del optimizer
     gc.collect()
+
+    trim_memory()
 
 # ask user if they want to test the models
 mode = input('test the models (y/n): ').lower()
