@@ -465,6 +465,7 @@ if mode == 'y':
     # estimate the loss of the final model
     model.estimate_loss(MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
 
+    del model_loss
     del model
     del optimizer
     gc.collect()
