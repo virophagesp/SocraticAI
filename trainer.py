@@ -299,10 +299,8 @@ class GPTLanguageModel(nn.Module):
         """ get a batch of training data """
 
         # load block sized chunks of a batch of the data for inputs context and targets
-        context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long)
-        context.to(DEVICE)
-        targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long)
-        targets.to(DEVICE)
+        context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+        targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
         batch_index = 0
         while batch_index < BATCH_SIZE:
             data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
