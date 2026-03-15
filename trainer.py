@@ -301,15 +301,11 @@ class GPTLanguageModel(nn.Module):
         # load block sized chunks of a batch of the data for inputs context and targets
         context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
         targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-        batch_index = 0
-        while batch_index < BATCH_SIZE:
+        for batch_index in range(BATCH_SIZE):
             data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
-            block_index = 0
-            while block_index < BLOCK_SIZE:
+            for block_index in range(BLOCK_SIZE):
                 context[batch_index][block_index] = data[data_batch + block_index]
                 targets[batch_index][block_index] = data[data_batch + block_index + 1]
-                block_index += 1
-            batch_index += 1
 
         logits = self.forward(context)
 
