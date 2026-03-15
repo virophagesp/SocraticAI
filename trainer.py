@@ -179,20 +179,15 @@ class Head(nn.Module):
         """  """
 
         super().__init__()
-        self.keys = nn.Linear(N_EMBD, HEAD_SIZE, bias=False)
-        self.queries = nn.Linear(N_EMBD, HEAD_SIZE, bias=False)
-        self.values = nn.Linear(N_EMBD, HEAD_SIZE, bias=False)
-        self.register_buffer(
-            'tril',
-            torch.tril(torch.ones(BLOCK_SIZE, BLOCK_SIZE))
-        )
+        self.qkv = nn.Linear(N_EMBD, 3 * HEAD_SIZE, bias=False)
+        self.tril = torch.tril(torch.ones(BLOCK_SIZE, BLOCK_SIZE))
         self.dropout = nn.Dropout(DROPOUT)
 
     def forward(self, head_input):
         """  """
 
-        key = self.keys(head_input)  # (1,BLOCK_SIZE,HEAD_SIZE)
-        query = self.queries(head_input)  # (1,BLOCK_SIZE,HEAD_SIZE)
+        # split the merged qkv layer into separate query key and value
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (1,BLOCK_SIZE,HEAD_SIZE)
         # compute attention scores ("affinities")
         weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (1, BLOCK_SIZE, HEAD_SIZE) @ (B, HEAD_SIZE, BLOCK_SIZE) -> (1, BLOCK_SIZE, BLOCK_SIZE)
         weight = weight.masked_fill(
@@ -202,7 +197,6 @@ class Head(nn.Module):
         weight = F.softmax(weight, dim=-1)  # (1, BLOCK_SIZE, BLOCK_SIZE)
         weight = self.dropout(weight)
         # perform the weighted aggregation of the values
-        value = self.values(head_input)  # (1,BLOCK_SIZE,HEAD_SIZE)
         output = weight @ value  # (1, BLOCK_SIZE, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, BLOCK_SIZE, HEAD_SIZE)
         return output
 
