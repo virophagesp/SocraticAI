@@ -168,8 +168,8 @@ def decode(tokens):
 
 
 # Training and validation data encoded and converted to tensors
-train_data = torch.tensor(encode(text), dtype=torch.long)
-validation_data = torch.tensor(encode(validation), dtype=torch.long)
+train_data = torch.tensor(encode(text), dtype=torch.long, device=DEVICE)
+validation_data = torch.tensor(encode(validation), dtype=torch.long, device=DEVICE)
 
 
 class Head(nn.Module):
@@ -289,123 +289,123 @@ class GPTLanguageModel(nn.Module):
 
         return logits
 
-    def batch(self, data):
-        """ get a batch of training data """
+def batch(model, data):
+    """ get a batch of training data """
 
-        # load block sized chunks of a batch of the data for inputs context and targets
-        context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-        targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-        for batch_index in range(BATCH_SIZE):
-            data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
-            for block_index in range(BLOCK_SIZE):
-                context[batch_index][block_index] = data[data_batch + block_index]
-                targets[batch_index][block_index] = data[data_batch + block_index + 1]
+    # load block sized chunks of a batch of the data for inputs context and targets
+    context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+    targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+    for batch_index in range(BATCH_SIZE):
+        data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
+        for block_index in range(BLOCK_SIZE):
+            context[batch_index][block_index] = data[data_batch + block_index]
+            targets[batch_index][block_index] = data[data_batch + block_index + 1]
 
-        logits = self.forward(context)
+    logits = model.forward(context)
 
-        logits = logits.view(BATCH_SIZE * BLOCK_SIZE, vocab_size)
-        targets = targets.view(BATCH_SIZE * BLOCK_SIZE)
-        loss = F.cross_entropy(logits, targets)
+    logits = logits.view(BATCH_SIZE * BLOCK_SIZE, vocab_size)
+    targets = targets.view(BATCH_SIZE * BLOCK_SIZE)
+    loss = F.cross_entropy(logits, targets)
 
-        return loss
+    return loss
 
-    def generate(self, context):
-        """ generate tokens after  """
+def generate(model, context):
+    """ generate tokens after  """
 
-        # context is initally (1, BLOCK_SIZE) array of indices in the current context
-        while context[0].tolist()[-1] != encode('"')[0]:
-            # crop context to the last BLOCK_SIZE tokens
-            context_crop = context[:, -BLOCK_SIZE:]
-            # get the predictions
-            logits = self.forward(context_crop)
-            # focus only on the last time step
-            logits = logits[:, -1, :]  # becomes (1, vocab_size)
-            # apply softmax to get probabilities
-            probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
-            # sample from the distribution
-            context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
-            # append sampled index to the running sequence
-            context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
+    # context is initally (1, BLOCK_SIZE) array of indices in the current context
+    while context[0].tolist()[-1] != encode('"')[0]:
+        # crop context to the last BLOCK_SIZE tokens
+        context_crop = context[:, -BLOCK_SIZE:]
+        # get the predictions
+        logits = model.forward(context_crop)
+        # focus only on the last time step
+        logits = logits[:, -1, :]  # becomes (1, vocab_size)
+        # apply softmax to get probabilities
+        probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
+        # sample from the distribution
+        context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
+        # append sampled index to the running sequence
+        context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
 
-        return context
+    return context
 
-    # this property improves performance for this function
-    @torch.no_grad()
-    def estimate_loss(self, step, model_index):
-        """ estimate the model's loss """
+# this property improves performance for this function
+@torch.no_grad()
+def estimate_loss(model, step, model_index):
+    """ estimate the model's loss """
 
-        self.eval()
-        losses = torch.zeros(EVAL_ITERS)
-        for looper in range(EVAL_ITERS):
-            losses[looper] = self.batch(train_data).item()
-        out_train = losses.mean()
-        losses = torch.zeros(EVAL_ITERS)
-        for looper in range(EVAL_ITERS):
-            losses[looper] = self.batch(validation_data).item()
-        out_validate = losses.mean()
-        self.train()
+    model.eval()
+    losses = torch.zeros(EVAL_ITERS)
+    for looper in range(EVAL_ITERS):
+        losses[looper] = batch(model, train_data).item()
+    out_train = losses.mean()
+    losses = torch.zeros(EVAL_ITERS)
+    for looper in range(EVAL_ITERS):
+        losses[looper] = batch(model, validation_data).item()
+    out_validate = losses.mean()
+    model.train()
 
-        # print the step and losses
-        print_and_write_to_file(f'step {step}: train loss {out_train:.4f}')
-        # this is to align it with train loss during printing
-        aligment_spacing = ' ' * len(str(step))
-        print_and_write_to_file(f'  {aligment_spacing}  validate loss {out_validate:.4f}')
+    # print the step and losses
+    print_and_write_to_file(f'step {step}: train loss {out_train:.4f}')
+    # this is to align it with train loss during printing
+    aligment_spacing = ' ' * len(str(step))
+    print_and_write_to_file(f'  {aligment_spacing}  validate loss {out_validate:.4f}')
 
-        # save model
-        with open(f'model{model_index}.pkl', 'wb') as f:
-            pickle.dump(self, f)
+    # save model
+    with open(f'model{model_index}.pkl', 'wb') as f:
+        pickle.dump(model, f)
 
-    def model_information_printer(self, mode_index=None):
-        """ print the model's parameters and index if in testing mode """
+def model_information_printer(parameters, mode_index=None):
+    """ print the model's parameters and index if in testing mode """
 
-        # get number of parameters
-        parameter_count = 0
-        for parameter in self.parameters():
-            parameter_count += parameter.numel()
+    # get number of parameters
+    parameter_count = 0
+    for parameter in parameters:
+        parameter_count += parameter.numel()
 
-        # print the number of parameters measured in millions in the model
-        # and it's index
-        print_and_write_to_file('')
-        if mode_index is None:
-            print_and_write_to_file(f'model has {parameter_count/1e6} million parameters')
-        else:
-            print_and_write_to_file(f'model {mode_index} has {parameter_count/1e6} million parameters')
-        print_and_write_to_file('')
+    # print the number of parameters measured in millions in the model
+    # and it's index
+    print_and_write_to_file('')
+    if mode_index is None:
+        print_and_write_to_file(f'model has {parameter_count/1e6} million parameters')
+    else:
+        print_and_write_to_file(f'model {mode_index} has {parameter_count/1e6} million parameters')
+    print_and_write_to_file('')
 
-    def question_answerer(self, question_string):
-        """ input question and generate answer """
+def question_answerer(model, question_string):
+    """ input question and generate answer """
 
-        # encode question
-        question = encode(f'question: "{filter(question_string)}?"\nanswer: "i don\'t know')
-        # when the block is not at least BLOCK_SIZE, it will crash
-        # add newline characters as placeholders, like the training data
-        while len(question) < BLOCK_SIZE:
-            question.insert(0, encode('\n')[0])
+    # encode question
+    question = encode(f'question: "{filter(question_string)}?"\nanswer: "i don\'t know')
+    # when the block is not at least BLOCK_SIZE, it will crash
+    # add newline characters as placeholders, like the training data
+    while len(question) < BLOCK_SIZE:
+        question.insert(0, encode('\n')[0])
 
-        # generate from the model
-        context = torch.zeros(
-            (1, len(question)),
-            dtype=torch.long,
-            device=DEVICE
-        )
-        for looper in range(len(question)):
-            context[0][looper] = question[looper]
-        generated = self.generate(context)
+    # generate from the model
+    context = torch.zeros(
+        (1, len(question)),
+        dtype=torch.long,
+        device=DEVICE
+    )
+    for looper in range(len(question)):
+        context[0][looper] = question[looper]
+    generated = generate(model, context)
 
-        # blank line between separate sets of questions and answers
-        print_and_write_to_file('')
+    # blank line between separate sets of questions and answers
+    print_and_write_to_file('')
 
-        # generated only has 1 element, this is the string with the question and answer
-        output_as_string = decode(generated[0].tolist())
+    # generated only has 1 element, this is the string with the question and answer
+    output_as_string = decode(generated[0].tolist())
 
-        # make sure there are not multiple newlines between separate sets of questions and answers
-        while output_as_string[0] == '\n':
-            output_as_string = output_as_string[1:]
-        while '\n\n' in output_as_string:
-            output_as_string = output_as_string.replace('\n\n', '')
+    # make sure there are not multiple newlines between separate sets of questions and answers
+    while output_as_string[0] == '\n':
+        output_as_string = output_as_string[1:]
+    while '\n\n' in output_as_string:
+        output_as_string = output_as_string.replace('\n\n', '')
 
-        # print question and answer
-        print_and_write_to_file(output_as_string)
+    # print question and answer
+    print_and_write_to_file(output_as_string)
 
 
 # free torch memory usage on cpu mode after training done
@@ -425,15 +425,17 @@ if mode == 'y':
 
     # create the 0th model if doesn't exist
     if BEGIN_INTERATIONS == 0:
+        model = GPTLanguageModel()
+        model.to(DEVICE)
         with open(f'model0.pkl', 'wb') as f:
-            pickle.dump(GPTLanguageModel(), f)
+            pickle.dump(model, f)
     # load model
-    with open(f'model{int(BEGIN_INTERATIONS/EVAL_INTERVAL)}.pkl', 'rb') as f:
-        model = pickle.load(f)
-    model.to(DEVICE)
+    else:
+        with open(f'model{int(BEGIN_INTERATIONS/EVAL_INTERVAL)}.pkl', 'rb') as f:
+            model = pickle.load(f)
 
     # print the number of parameters in the model
-    model.model_information_printer()
+    model_information_printer(model.parameters())
 
     # create a PyTorch optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
@@ -442,17 +444,17 @@ if mode == 'y':
 
         # every EVAL_INTERVAL evaluate the loss on train and val sets
         if iteration % EVAL_INTERVAL == 0:
-            model.estimate_loss(iteration, model_index)
+            estimate_loss(model, iteration, model_index)
             model_index += 1
 
         # evaluate the loss
-        model_loss = model.batch(train_data)
+        model_loss = batch(model, train_data)
         optimizer.zero_grad(set_to_none=True)
         model_loss.backward()
         optimizer.step()
 
     # estimate the loss of the final model
-    model.estimate_loss(MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
+    estimate_loss(model, MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
 
     del model_loss
     del model
@@ -473,12 +475,12 @@ if mode != 'y':
     model.to(DEVICE)
 
     # print the number of parameters in the model
-    model.model_information_printer()
+    model_information_printer(model.parameters())
 
     # input question from user and get answer from model
     user_question = input('question: ').lower()
     testing_file.write(f'question: {user_question}\n')
-    model.question_answerer(user_question)
+    question_answerer(model, user_question)
 
 # test questions from file for the saved model stages
 else:
@@ -493,12 +495,12 @@ else:
         model.to(DEVICE)
 
         # print the number of parameters in the model and it's index
-        model.model_information_printer(model_index)
+        model_information_printer(model.parameters(), model_index)
 
         # test model with each question
         looper = 0
         while looper < int(len(questions)/2):
-            model.question_answerer(questions[looper*2])
+            question_answerer(model, questions[looper*2])
             looper += 1
 
         print_and_write_to_file('')
