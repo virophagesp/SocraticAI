@@ -68,8 +68,8 @@ def raw_to_processed(raw_data):
 raw_training_data = json.load(open('questions.json', 'r'))
 raw_testing_data = json.load(open('testing.json', 'r'))
 # Open the files containing output of using preprocessor
-train_data = raw_to_processed(raw_training_data).lower()
-validation_data = raw_to_processed(raw_testing_data).lower()
+train_data_unencoded = raw_to_processed(raw_training_data).lower()
+validation_data_unencoded = raw_to_processed(raw_testing_data).lower()
 
 # file that records testing
 testing_file = open('testing.txt', 'w')
@@ -104,7 +104,7 @@ words = [
     'of'
 ]
 # each known letter, number, and special character as a token
-chars = sorted(list(set(train_data + validation_data)))
+chars = sorted(list(set(train_data_unencoded + validation_data_unencoded)))
 # all tokens
 vocabulary = chars + words
 
@@ -163,6 +163,10 @@ def decode(tokens):
 
     decoded = ''.join([int_to_vocab[token] for token in tokens])
     return decoded
+
+
+train_data = [x for x in encode(train_data_unencoded)]
+validation_data = [x for x in encode(validation_data_unencoded)]
 
 
 class Head(nn.Module):
@@ -292,8 +296,8 @@ def batch(model, data):
     for batch_index in range(BATCH_SIZE):
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
         for block_index in range(BLOCK_SIZE):
-            context[batch_index][block_index] = vocab_to_int[data[data_batch + block_index]]
-            targets[batch_index][block_index] = vocab_to_int[data[data_batch + block_index + 1]]
+            context[batch_index][block_index] = data[data_batch + block_index]
+            targets[batch_index][block_index] = data[data_batch + block_index + 1]
 
     logits = model.forward(context)
 
