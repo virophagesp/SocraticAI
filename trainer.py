@@ -68,8 +68,8 @@ def raw_to_processed(raw_data):
 raw_training_data = json.load(open('questions.json', 'r'))
 raw_testing_data = json.load(open('testing.json', 'r'))
 # Open the files containing output of using preprocessor
-text = raw_to_processed(raw_training_data).lower()
-validation = raw_to_processed(raw_testing_data).lower()
+train_data = raw_to_processed(raw_training_data).lower()
+validation_data = raw_to_processed(raw_testing_data).lower()
 
 # file that records testing
 testing_file = open('testing.txt', 'w')
@@ -104,7 +104,7 @@ words = [
     'of'
 ]
 # each known letter, number, and special character as a token
-chars = sorted(list(set(text + validation)))
+chars = sorted(list(set(train_data + validation_data)))
 # all tokens
 vocabulary = chars + words
 
@@ -139,7 +139,6 @@ def filter(string):
 def encode(string):
     """ encoder: take a string, output a list of integers """
 
-    encoding = []
     string_index = 0
     while string_index < len(string):
         word_index = 0
@@ -148,16 +147,15 @@ def encode(string):
         while word_index < len(words):
             word = words[word_index]
             if string[string_index: string_index + len(word)] == word:
-                encoding.append(vocab_to_int[word])
+                yield vocab_to_int[word]
                 string_index += len(word)
                 break
             word_index += 1
 
         # append single character token if no word was added
         if word_index == len(words):
-            encoding.append(vocab_to_int[string[string_index]])
+            yield vocab_to_int[string[string_index]]
             string_index += 1
-    return encoding
 
 
 def decode(tokens):
@@ -165,11 +163,6 @@ def decode(tokens):
 
     decoded = ''.join([int_to_vocab[token] for token in tokens])
     return decoded
-
-
-# Training and validation data encoded and converted to tensors
-train_data = torch.tensor(encode(text), dtype=torch.long, device=DEVICE)
-validation_data = torch.tensor(encode(validation), dtype=torch.long, device=DEVICE)
 
 
 class Head(nn.Module):
@@ -289,6 +282,7 @@ class GPTLanguageModel(nn.Module):
 
         return logits
 
+
 def batch(model, data):
     """ get a batch of training data """
 
@@ -298,8 +292,8 @@ def batch(model, data):
     for batch_index in range(BATCH_SIZE):
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
         for block_index in range(BLOCK_SIZE):
-            context[batch_index][block_index] = data[data_batch + block_index]
-            targets[batch_index][block_index] = data[data_batch + block_index + 1]
+            context[batch_index][block_index] = vocab_to_int[data[data_batch + block_index]]
+            targets[batch_index][block_index] = vocab_to_int[data[data_batch + block_index + 1]]
 
     logits = model.forward(context)
 
@@ -309,11 +303,12 @@ def batch(model, data):
 
     return loss
 
+
 def generate(model, context):
     """ generate tokens after  """
 
     # context is initally (1, BLOCK_SIZE) array of indices in the current context
-    while context[0].tolist()[-1] != encode('"')[0]:
+    while context[0].tolist()[-1] != vocab_to_int['"']:
         # crop context to the last BLOCK_SIZE tokens
         context_crop = context[:, -BLOCK_SIZE:]
         # get the predictions
@@ -328,6 +323,7 @@ def generate(model, context):
         context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
 
     return context
+
 
 # this property improves performance for this function
 @torch.no_grad()
@@ -355,6 +351,7 @@ def estimate_loss(model, step, model_index):
     with open(f'model{model_index}.pkl', 'wb') as f:
         pickle.dump(model, f)
 
+
 def model_information_printer(parameters, mode_index=None):
     """ print the model's parameters and index if in testing mode """
 
@@ -372,6 +369,7 @@ def model_information_printer(parameters, mode_index=None):
         print_and_write_to_file(f'model {mode_index} has {parameter_count/1e6} million parameters')
     print_and_write_to_file('')
 
+
 def question_answerer(model, question_string):
     """ input question and generate answer """
 
@@ -380,7 +378,7 @@ def question_answerer(model, question_string):
     # when the block is not at least BLOCK_SIZE, it will crash
     # add newline characters as placeholders, like the training data
     while len(question) < BLOCK_SIZE:
-        question.insert(0, encode('\n')[0])
+        question.insert(0, vocab_to_int['\n'])
 
     # generate from the model
     context = torch.zeros(
