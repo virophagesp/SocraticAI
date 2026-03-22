@@ -35,41 +35,9 @@ DROPOUT = 0.2
 HEAD_SIZE = N_EMBD // N_HEAD
 
 
-# process the raw json data and convert it to usable text
-def raw_to_processed(raw_data):
-    output_data = ""
-    # Loop over data and write to input file
-    data_looper = 0
-    # only half the length since it will be using two items at a time
-    while data_looper < int(len(raw_data)/2):
-        # Get the question, every even number are the strings
-        question = raw_data[data_looper*2]
-        # Loop over the answers, every odd number are the lists
-        for answer in raw_data[data_looper*2+1]:
-            # Add the same amount of newline characters
-            #  as block_size in the training script
-            # The reason why this is done is because
-            #  the ai will incorrectly learn to try
-            #  to predict more questions after answering
-            #  this not only is not something it should learn
-            #  but could cause issues and confusion for users
-            #  if it seemingly starts getting new weird inputs
-            #  that weren't typed in
-            for i in range(BLOCK_SIZE):
-                output_data += '\n'
-            # Print question then answer
-            output_data += f'question: "{question}"\n'
-            output_data += f'answer: "{answer}"\n'
-        data_looper += 1
-    return output_data
-
-
 # Open and read the raw training and testing data from the JSON files
 raw_training_data = json.load(open('questions.json', 'r'))
 raw_testing_data = json.load(open('testing.json', 'r'))
-# Open the files containing output of using preprocessor
-train_data_unencoded = raw_to_processed(raw_training_data).lower()
-validation_data_unencoded = raw_to_processed(raw_testing_data).lower()
 
 # file that records testing
 testing_file = open('testing.txt', 'w')
@@ -103,8 +71,21 @@ words = [
     'concept',
     'of'
 ]
-# each known letter, number, and special character as a token
-chars = sorted(list(set(train_data_unencoded + validation_data_unencoded)))
+# within all the data, each known letter, number, and special character, as a token
+chars = ''
+for data in raw_training_data:
+    if type(data) == list:
+        chars += ''.join(data)
+    else:
+        chars += data
+for data in raw_testing_data:
+    if type(data) == list:
+        chars += ''.join(data)
+    else:
+        chars += data
+chars += ''.join(words)
+# remove duplicate characters and converts the string into a sorted list
+chars = sorted(list(set(chars)))
 # all tokens
 vocabulary = chars + words
 
@@ -137,7 +118,9 @@ def filter(string):
 
 
 def encode(string):
-    """ encoder: take a string, output a list of integers """
+    """ encoder: take a string, output a list of integer tokens """
+
+    tokens = []
 
     string_index = 0
     while string_index < len(string):
@@ -147,14 +130,14 @@ def encode(string):
         while word_index < len(words):
             word = words[word_index]
             if string[string_index: string_index + len(word)] == word:
-                yield vocab_to_int[word]
+                tokens.append(vocab_to_int[word])
                 string_index += len(word)
                 break
             word_index += 1
 
         # append single character token if no word was added
         if word_index == len(words):
-            yield vocab_to_int[string[string_index]]
+            tokens.append(vocab_to_int[string[string_index]])
             string_index += 1
 
 
@@ -165,8 +148,38 @@ def decode(tokens):
     return decoded
 
 
-train_data = [x for x in encode(train_data_unencoded)]
-validation_data = [x for x in encode(validation_data_unencoded)]
+# process the raw json data and convert it to usable text
+def raw_to_processed(raw_data):
+    output_data = ""
+    # Loop over data and write to input file
+    data_looper = 0
+    # only half the length since it will be using two items at a time
+    while data_looper < int(len(raw_data)/2):
+        # Get the question, every even number are the strings
+        question = raw_data[data_looper*2]
+        # Loop over the answers, every odd number are the lists
+        for answer in raw_data[data_looper*2+1]:
+            # Add the same amount of newline characters
+            #  as block_size in the training script
+            # The reason why this is done is because
+            #  the ai will incorrectly learn to try
+            #  to predict more questions after answering
+            #  this not only is not something it should learn
+            #  but could cause issues and confusion for users
+            #  if it seemingly starts getting new weird inputs
+            #  that weren't typed in
+            for i in range(BLOCK_SIZE):
+                output_data += '\n'
+            # Print question then answer
+            output_data += f'question: "{question}"\n'
+            output_data += f'answer: "{answer}"\n'
+        data_looper += 1
+    return output_data
+
+
+# Open the files containing output of using preprocessor
+train_data = encode(raw_to_processed(raw_training_data).lower())
+validation_data = encode(raw_to_processed(raw_testing_data).lower())
 
 
 class Head(nn.Module):
