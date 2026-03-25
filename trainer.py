@@ -140,6 +140,8 @@ def encode(string):
             tokens.append(vocab_to_int[string[string_index]])
             string_index += 1
 
+    return tokens
+
 
 def decode(tokens):
     """ decoder: take a encoded list of integers representing tokens output the decoded string """
