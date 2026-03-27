@@ -11,8 +11,8 @@ import ctypes
 BATCH_SIZE = 64
 # The maximum context length for predictions
 BLOCK_SIZE = 256
-# Maximum interations of training
-MAX_ITERS = 2000
+# Maximum iterations of training
+MAX_ITERS = 1000
 # Beginning model's amount of iterations
 BEGIN_INTERATIONS = 0
 # Every 100 iterations of training, print loss and save stage
