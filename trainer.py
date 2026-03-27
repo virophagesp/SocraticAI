@@ -28,8 +28,6 @@ N_EMBD = 384
 N_HEAD = 6
 # The number of block layers
 N_LAYER = 6
-# This helps reduce overfitting by peridically setting some weights to zero
-DROPOUT = 0.2
 
 # The size of self-attention heads
 HEAD_SIZE = N_EMBD // N_HEAD
@@ -193,7 +191,6 @@ class Head(nn.Module):
         super().__init__()
         self.qkv = nn.Linear(N_EMBD, 3 * HEAD_SIZE, bias=False)
         self.tril = torch.tril(torch.ones(BLOCK_SIZE, BLOCK_SIZE))
-        self.dropout = nn.Dropout(DROPOUT)
 
     def forward(self, head_input):
         """  """
@@ -207,7 +204,6 @@ class Head(nn.Module):
             float('-inf')
         )  # (1, BLOCK_SIZE, BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (1, BLOCK_SIZE, BLOCK_SIZE)
-        weight = self.dropout(weight)
         # perform the weighted aggregation of the values
         output = weight @ value  # (1, BLOCK_SIZE, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, BLOCK_SIZE, HEAD_SIZE)
         return output
@@ -222,7 +218,6 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         self.heads = nn.ModuleList([Head() for _ in range(N_HEAD)])
         self.project = nn.Linear(N_EMBD, N_EMBD)
-        self.dropout = nn.Dropout(DROPOUT)
         self.LayerNormal = nn.LayerNorm(N_EMBD)
 
     def forward(self, logits):
@@ -230,7 +225,7 @@ class MultiHeadAttention(nn.Module):
 
         output = self.LayerNormal(logits)
         output = torch.cat([h(output) for h in self.heads], dim=-1)
-        output = self.dropout(self.project(output))
+        output = self.project(output)
         return output
 
 
@@ -247,7 +242,6 @@ class Block(nn.Module):
             nn.Linear(N_EMBD, 4 * N_EMBD),
             nn.ReLU(),
             nn.Linear(4 * N_EMBD, N_EMBD),
-            nn.Dropout(DROPOUT),
         )
 
     def forward(self, logits):
