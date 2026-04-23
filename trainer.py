@@ -310,9 +310,12 @@ def batch(model, data):
 
     logits = model.forward(context)
 
-    logits = logits.view(BATCH_SIZE * BLOCK_SIZE, vocab_size)
-    targets = targets.view(BATCH_SIZE * BLOCK_SIZE)
-    loss = F.cross_entropy(logits, targets)
+    loss = torch.tensor(0)
+    for looper in range(BATCH_SIZE):
+        logit = logits[looper].view(BLOCK_SIZE, vocab_size)
+        target = targets[looper].view(BLOCK_SIZE)
+        loss = loss + F.cross_entropy(logit, target)
+    loss = loss / BATCH_SIZE
 
     return loss
 
