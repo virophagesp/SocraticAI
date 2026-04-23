@@ -313,19 +313,19 @@ def batch(model, data):
     loss = torch.tensor(0)
     # adjust division if an entire batch is not added because it was all newline characters
     all_newline_count = 0
-    for looper in range(BATCH_SIZE):
+    for batch_index in range(BATCH_SIZE):
         # remove loss calculation involving newline characters at the front
         crop_front = 0
-        for looper2 in range(BLOCK_SIZE):
-            if targets[looper][looper2] == vocab_to_int['\n']:
+        for block_index in range(BLOCK_SIZE):
+            if targets[batch_index][block_index] == vocab_to_int['\n']:
                 crop_front += 1
             else:
                 break
 
         # in case the entire thing is newline characters
         if crop_front != BLOCK_SIZE:
-            logit = logits[looper][crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
-            target = targets[looper][crop_front:].view((BLOCK_SIZE - crop_front))
+            logit = logits[batch_index][crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+            target = targets[batch_index][crop_front:].view((BLOCK_SIZE - crop_front))
             loss = loss + F.cross_entropy(logit, target)
         else:
             all_newline_count += 1
