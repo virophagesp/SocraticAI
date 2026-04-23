@@ -311,11 +311,26 @@ def batch(model, data):
     logits = model.forward(context)
 
     loss = torch.tensor(0)
+    # adjust division if an entire batch is not added because it was all newline characters
+    all_newline_count = 0
     for looper in range(BATCH_SIZE):
-        logit = logits[looper].view(BLOCK_SIZE, vocab_size)
-        target = targets[looper].view(BLOCK_SIZE)
-        loss = loss + F.cross_entropy(logit, target)
-    loss = loss / BATCH_SIZE
+        # remove loss calculation involving newline characters at the front
+        crop_front = 0
+        for looper2 in range(BLOCK_SIZE):
+            if targets[looper][looper2] == vocab_to_int['\n']:
+                crop_front += 1
+            else:
+                break
+
+        # in case the entire thing is newline characters
+        if crop_front != BLOCK_SIZE:
+            logit = logits[looper][crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+            target = targets[looper][crop_front:].view((BLOCK_SIZE - crop_front))
+            loss = loss + F.cross_entropy(logit, target)
+        else:
+            all_newline_count += 1
+    if all_newline_count != BATCH_SIZE: # prevent divide by zero if all batches were all newline characters
+        loss = loss / (BATCH_SIZE - all_newline_count)
 
     return loss
 
@@ -463,9 +478,10 @@ if mode == 'y':
 
         # evaluate the loss
         model_loss = batch(model, train_data)
-        optimizer.zero_grad(set_to_none=True)
-        model_loss.backward()
-        optimizer.step()
+        if model_loss.tolist() != 0: # don't evaluate if the loss is zero
+            optimizer.zero_grad(set_to_none=True)
+            model_loss.backward()
+            optimizer.step()
 
     # estimate the loss of the final model
     estimate_loss(model, MAX_ITERS, int(MAX_ITERS/EVAL_INTERVAL))
