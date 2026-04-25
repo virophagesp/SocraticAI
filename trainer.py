@@ -311,19 +311,16 @@ def batch(model, data):
             context[batch_index][block_index] = data[data_batch + block_index]
             targets[batch_index][block_index] = data[data_batch + block_index + 1]
 
-        # remove loss calculation involving newline characters at the front
-        crop_front.append(0)
-        for block_index in range(BLOCK_SIZE):
-            if targets[batch_index][block_index] == vocab_to_int['\n']:
-                crop_front[batch_index] += 1
-            else:
-                break
-        
         # if the data batch was all newline characters, restart the loop iteration
-        if crop_front[batch_index] != BLOCK_SIZE:
+        if targets[batch_index][BLOCK_SIZE-1] != vocab_to_int['\n']:
+            # remove loss calculation involving newline characters at the front
+            crop_front.append(0)
+            for block_index in range(BLOCK_SIZE):
+                if targets[batch_index][block_index] == vocab_to_int['\n']:
+                    crop_front[batch_index] += 1
+                else:
+                    break
             batch_index += 1
-        else:
-            crop_front.pop()
 
     logits = model.forward(context)
 
