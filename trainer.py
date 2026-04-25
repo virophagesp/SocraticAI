@@ -301,8 +301,6 @@ def batch(model, data):
 
     # remove loss calculation involving newline characters at the front
     crop_front = []
-    # adjust division if an entire batch is not added because it was all newline characters
-    all_newline_count = 0
     # load block sized chunks of a batch of the data for inputs context and targets
     context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
     targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
@@ -331,15 +329,10 @@ def batch(model, data):
 
     loss = torch.tensor(0)
     for batch_index in range(BATCH_SIZE):
-        # in case the entire thing is newline characters
-        if crop_front[batch_index] != BLOCK_SIZE:
-            logit = logits[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]), vocab_size)
-            target = targets[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]))
-            loss = loss + F.cross_entropy(logit, target)
-        else:
-            all_newline_count += 1
-    if all_newline_count != BATCH_SIZE: # prevent divide by zero if all batches were all newline characters
-        loss = loss / (BATCH_SIZE - all_newline_count)
+        logit = logits[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]), vocab_size)
+        target = targets[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]))
+        loss = loss + F.cross_entropy(logit, target)
+    loss = loss / BATCH_SIZE
 
     return loss
 
