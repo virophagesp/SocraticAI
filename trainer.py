@@ -299,33 +299,42 @@ class GPTLanguageModel(nn.Module):
 def batch(model, data):
     """ get a batch of training data """
 
+    # remove loss calculation involving newline characters at the front
+    crop_front = []
+    # adjust division if an entire batch is not added because it was all newline characters
+    all_newline_count = 0
     # load block sized chunks of a batch of the data for inputs context and targets
     context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
     targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-    for batch_index in range(BATCH_SIZE):
+    batch_index = 0
+    while batch_index < BATCH_SIZE:
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
         for block_index in range(BLOCK_SIZE):
             context[batch_index][block_index] = data[data_batch + block_index]
             targets[batch_index][block_index] = data[data_batch + block_index + 1]
 
+        # remove loss calculation involving newline characters at the front
+        crop_front.append(0)
+        for block_index in range(BLOCK_SIZE):
+            if targets[batch_index][block_index] == vocab_to_int['\n']:
+                crop_front[batch_index] += 1
+            else:
+                break
+        
+        # if the data batch was all newline characters, restart the loop iteration
+        if crop_front[batch_index] != BLOCK_SIZE:
+            batch_index += 1
+        else:
+            crop_front.pop()
+
     logits = model.forward(context)
 
     loss = torch.tensor(0)
-    # adjust division if an entire batch is not added because it was all newline characters
-    all_newline_count = 0
     for batch_index in range(BATCH_SIZE):
-        # remove loss calculation involving newline characters at the front
-        crop_front = 0
-        for block_index in range(BLOCK_SIZE):
-            if targets[batch_index][block_index] == vocab_to_int['\n']:
-                crop_front += 1
-            else:
-                break
-
         # in case the entire thing is newline characters
-        if crop_front != BLOCK_SIZE:
-            logit = logits[batch_index][crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
-            target = targets[batch_index][crop_front:].view((BLOCK_SIZE - crop_front))
+        if crop_front[batch_index] != BLOCK_SIZE:
+            logit = logits[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]), vocab_size)
+            target = targets[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]))
             loss = loss + F.cross_entropy(logit, target)
         else:
             all_newline_count += 1
