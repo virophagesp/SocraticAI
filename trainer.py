@@ -246,20 +246,20 @@ class MultiHeadAttention(nn.Module):
 
         global generating
 
-        output = self.LayerNormal(logits)
+        output = self.LayerNormal(logits) # (1, BLOCK_SIZE, HEAD_SIZE)
         if generating:
             keys = []
             values = []
             temp = []
             for h in range(N_HEAD):
-                key, value = self.heads[h].pre_get_generate(output)
+                key, value = self.heads[h].pre_get_generate(output) # both are (1, BLOCK_SIZE, HEAD_SIZE)
                 keys.append(key)
                 values.append(value)
-                temp.append(self.heads[h].forward_generate(output[:, -1, :], keys[h], values[h]))
-            output = torch.cat(temp, dim=-1)
+                temp.append(self.heads[h].forward_generate(output[:, -1, :], keys[h], values[h])) # each is (1, 1, HEAD_SIZE)
+            output = torch.cat(temp, dim=-1) # (1, 1, HEAD_SIZE)
         else:
-            output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1)
-        output = self.project(output)
+            output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (1, BLOCK_SIZE, HEAD_SIZE)
+        output = self.project(output) # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
         return output
 
 
