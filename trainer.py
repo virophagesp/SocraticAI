@@ -283,11 +283,13 @@ class Block(nn.Module):
 
         global generating
 
+        # apply multihead attention
         if generating:
-            logits = logits[:, -1, :] + self.SelfAttention(logits)
+            logits = logits[:, -1, :] + self.SelfAttention(logits)  # (1, 1, HEAD_SIZE)
         else:
-            logits = logits + self.SelfAttention(logits)
-        logits = logits + self.FeedFoward(logits)
+            logits = logits + self.SelfAttention(logits)  # (1, BLOCK_SIZE, HEAD_SIZE)
+        # apply feed forward
+        logits = logits + self.FeedFoward(logits)  # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
         return logits
 
 
