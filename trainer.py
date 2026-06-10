@@ -14,7 +14,7 @@ BLOCK_SIZE = 256
 # Maximum iterations of training
 MAX_ITERS = 1000
 # Beginning model's amount of iterations
-BEGIN_INTERATIONS = 0
+BEGIN_INTERATIONS = 1000
 # Every 100 iterations of training, print loss and save stage
 EVAL_INTERVAL = 100
 # The rate of learning
@@ -205,8 +205,29 @@ class Head(nn.Module):
         )  # (1, BLOCK_SIZE, BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (1, BLOCK_SIZE, BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        output = weight @ value  # (1, BLOCK_SIZE, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, BLOCK_SIZE, HEAD_SIZE)
-        return output
+        return weight @ value  # (1, BLOCK_SIZE, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, BLOCK_SIZE, HEAD_SIZE)
+
+    def pre_get_generate(self, head_input):
+        """  """
+
+        # split the merged qkv layer into separate query key and value
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (1, BLOCK_SIZE, HEAD_SIZE)
+        return key, value
+
+    def forward_generate(self, head_input, key, value):
+        """  """
+
+        # split the merged qkv layer into separate query key and value
+        query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (1, BLOCK_SIZE, HEAD_SIZE)
+        # compute attention scores ("affinities")
+        weight = (query.unsqueeze(1) @ key.transpose(-2, -1)).squeeze(1) * HEAD_SIZE**-0.5  # (1, 1, HEAD_SIZE) @ (1, HEAD_SIZE, BLOCK_SIZE) -> (1, 1, BLOCK_SIZE)
+        weight = weight.masked_fill(
+            self.tril[-1, :BLOCK_SIZE] == 0,
+            float('-inf')
+        )  # (1, 1, BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (1, BLOCK_SIZE, BLOCK_SIZE) or (1, 1, BLOCK_SIZE)
+        # perform the weighted aggregation of the values
+        return (weight.unsqueeze(1) @ value).squeeze(1)  # (1, 1, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, 1, HEAD_SIZE)
 
 
 class MultiHeadAttention(nn.Module):
@@ -223,8 +244,21 @@ class MultiHeadAttention(nn.Module):
     def forward(self, logits):
         """  """
 
+        global generating
+
         output = self.LayerNormal(logits)
-        output = torch.cat([h(output) for h in self.heads], dim=-1)
+        if generating:
+            keys = []
+            values = []
+            temp = []
+            for h in range(N_HEAD):
+                key, value = self.heads[h].pre_get_generate(output)
+                keys.append(key)
+                values.append(value)
+                temp.append(self.heads[h].forward_generate(output[:, -1, :], keys[h], values[h]))
+            output = torch.cat(temp, dim=-1)
+        else:
+            output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1)
         output = self.project(output)
         return output
 
@@ -247,7 +281,12 @@ class Block(nn.Module):
     def forward(self, logits):
         """  """
 
-        logits = logits + self.SelfAttention(logits)
+        global generating
+
+        if generating:
+            logits = logits[:, -1, :] + self.SelfAttention(logits)
+        else:
+            logits = logits + self.SelfAttention(logits)
         logits = logits + self.FeedFoward(logits)
         return logits
 
@@ -283,21 +322,34 @@ class GPTLanguageModel(nn.Module):
     def forward(self, context):
         """  """
 
+        global generating
+
         # context and targets are both (1,BLOCK_SIZE) tensor of integers
         token_embed = self.token_embedding_table(context)  # (1,BLOCK_SIZE,N_EMBD)
         position_embed = self.position_embedding_table(
             torch.arange(BLOCK_SIZE, device=DEVICE)
         )  # (BLOCK_SIZE,N_EMBD)
         logits = token_embed + position_embed  # (1,BLOCK_SIZE,N_EMBD)
-        logits = self.blocks(logits)  # (1,BLOCK_SIZE,N_EMBD)
-        logits = self.FinalLayerNormal(logits)  # (1,BLOCK_SIZE,N_EMBD)
-        logits = self.lm_head(logits)  # (1,BLOCK_SIZE,vocab_size)
+
+        if generating:
+            generating = False
+            for index in range(N_LAYER-1):
+                logits = self.blocks[index](logits)  # (1,BLOCK_SIZE,N_EMBD)
+            generating = True
+            logits = self.blocks[N_LAYER-1](logits)  # (1,1,N_EMBD)
+        else:
+            logits = self.blocks(logits)  # (1,BLOCK_SIZE,N_EMBD)
+
+        logits = self.FinalLayerNormal(logits)  # (1,BLOCK_SIZE,N_EMBD) or (1,1,N_EMBD)
+        logits = self.lm_head(logits)  # (1,BLOCK_SIZE,vocab_size) or (1,1,vocab_size)
 
         return logits
 
 
 def batch(model, data):
     """ get a batch of training data """
+
+    global generating
 
     # remove loss calculation involving newline characters at the front
     crop_front = []
@@ -322,6 +374,7 @@ def batch(model, data):
                     break
             batch_index += 1
 
+    generating = False
     logits = model.forward(context)
 
     loss = torch.tensor(0)
@@ -337,14 +390,15 @@ def batch(model, data):
 def generate(model, context):
     """ generate tokens after  """
 
+    global generating
+
     # context is initally (1, BLOCK_SIZE) array of indices in the current context
     while context[0].tolist()[-1] != vocab_to_int['"']:
         # crop context to the last BLOCK_SIZE tokens
         context_crop = context[:, -BLOCK_SIZE:]
-        # get the predictions
-        logits = model.forward(context_crop)
-        # focus only on the last time step
-        logits = logits[:, -1, :]  # becomes (1, vocab_size)
+        # get the predictions focus only on the last time step
+        generating = True
+        logits = model.forward(context_crop) # (1, vocab_size)
         # apply softmax to get probabilities
         probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
         # sample from the distribution
