@@ -346,16 +346,15 @@ class GPTLanguageModel(nn.Module):
     def generate(self, context):
         """ generate tokens after  """
 
+        # only get the last BLOCK_SIZE elements of context for list of embedded tokens
+        token_embed = self.token_embedding_table(context[:, -BLOCK_SIZE:])  # (1, BLOCK_SIZE, N_EMBD)
+        # the position embedding is constant in the generation loop
+        position_embed = self.position_embedding_table(
+            torch.arange(BLOCK_SIZE, device=DEVICE)
+        )  # (BLOCK_SIZE, N_EMBD)
         # context is initally (1, BLOCK_SIZE) array of indices in the current context
         while context[0].tolist()[-1] != vocab_to_int['"']:
-            # crop context to the last BLOCK_SIZE tokens
-            context_crop = context[:, -BLOCK_SIZE:]
-
             # get the predictions focus only on the last time step
-            token_embed = self.token_embedding_table(context_crop)  # (1, BLOCK_SIZE, N_EMBD)
-            position_embed = self.position_embedding_table(
-                torch.arange(BLOCK_SIZE, device=DEVICE)
-            )  # (BLOCK_SIZE, N_EMBD)
             logits = token_embed + position_embed  # (1, BLOCK_SIZE, N_EMBD)
             for index in range(N_LAYER-1):
                 logits = self.blocks[index](logits)  # (1, BLOCK_SIZE, N_EMBD)
@@ -369,6 +368,11 @@ class GPTLanguageModel(nn.Module):
             context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
             # append sampled index to the running sequence
             context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
+
+            # shift list of embedded tokens and add the one for context_next_part
+            for looper in range(1, BLOCK_SIZE):
+                token_embed[0, looper - 1] = token_embed[0, looper]
+            token_embed[0, BLOCK_SIZE - 1] = self.token_embedding_table(context_next_part)
 
         return context
 
