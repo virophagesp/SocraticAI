@@ -343,22 +343,6 @@ class GPTLanguageModel(nn.Module):
 
         return logits
 
-    def forward_generate(self, context):
-        """  """
-
-        token_embed = self.token_embedding_table(context)  # (1, BLOCK_SIZE, N_EMBD)
-        position_embed = self.position_embedding_table(
-            torch.arange(BLOCK_SIZE, device=DEVICE)
-        )  # (BLOCK_SIZE, N_EMBD)
-        logits = token_embed + position_embed  # (1, BLOCK_SIZE, N_EMBD)
-        for index in range(N_LAYER-1):
-            logits = self.blocks[index](logits)  # (1, BLOCK_SIZE, N_EMBD)
-        logits = self.blocks[N_LAYER-1].forward_generate(logits)  # (1, N_EMBD)
-        logits = self.FinalLayerNormal(logits)  # (1, N_EMBD)
-        logits = self.lm_head(logits)  # (1, vocab_size)
-
-        return logits
-
     def generate(self, context):
         """ generate tokens after  """
 
@@ -366,8 +350,19 @@ class GPTLanguageModel(nn.Module):
         while context[0].tolist()[-1] != vocab_to_int['"']:
             # crop context to the last BLOCK_SIZE tokens
             context_crop = context[:, -BLOCK_SIZE:]
+
             # get the predictions focus only on the last time step
-            logits = self.forward_generate(context_crop) # (1, vocab_size)
+            token_embed = self.token_embedding_table(context_crop)  # (1, BLOCK_SIZE, N_EMBD)
+            position_embed = self.position_embedding_table(
+                torch.arange(BLOCK_SIZE, device=DEVICE)
+            )  # (BLOCK_SIZE, N_EMBD)
+            logits = token_embed + position_embed  # (1, BLOCK_SIZE, N_EMBD)
+            for index in range(N_LAYER-1):
+                logits = self.blocks[index](logits)  # (1, BLOCK_SIZE, N_EMBD)
+            logits = self.blocks[N_LAYER-1].forward_generate(logits)  # (1, N_EMBD)
+            logits = self.FinalLayerNormal(logits)  # (1, N_EMBD)
+            logits = self.lm_head(logits)  # (1, vocab_size)
+
             # apply softmax to get probabilities
             probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
             # sample from the distribution
