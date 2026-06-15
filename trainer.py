@@ -225,7 +225,7 @@ class Head(nn.Module):
             self.tril[-1, :BLOCK_SIZE] == 0,
             float('-inf')
         )  # (1, 1, BLOCK_SIZE)
-        weight = F.softmax(weight, dim=-1)  # (1, BLOCK_SIZE, BLOCK_SIZE) or (1, 1, BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (1, 1, BLOCK_SIZE)
         # perform the weighted aggregation of the values
         return (weight.unsqueeze(1) @ value).squeeze(1)  # (1, 1, BLOCK_SIZE) @ (1, BLOCK_SIZE, HEAD_SIZE) -> (1, 1, HEAD_SIZE)
 
@@ -246,7 +246,7 @@ class MultiHeadAttention(nn.Module):
 
         output = self.LayerNormal(logits) # (1, BLOCK_SIZE, HEAD_SIZE)
         output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (1, BLOCK_SIZE, HEAD_SIZE)
-        output = self.project(output) # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
+        output = self.project(output) # (1, BLOCK_SIZE, HEAD_SIZE)
         return output
 
     def forward_generate(self, logits):
@@ -262,7 +262,7 @@ class MultiHeadAttention(nn.Module):
             values.append(value)
             temp.append(self.heads[h].forward_generate(output[:, -1, :], keys[h], values[h])) # each is (1, 1, HEAD_SIZE)
         output = torch.cat(temp, dim=-1) # (1, 1, HEAD_SIZE)
-        output = self.project(output) # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
+        output = self.project(output) # (1, 1, HEAD_SIZE)
         return output
 
 
@@ -287,7 +287,7 @@ class Block(nn.Module):
         # apply multihead attention
         logits = logits + self.SelfAttention(logits)  # (1, BLOCK_SIZE, HEAD_SIZE)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (1, BLOCK_SIZE, HEAD_SIZE)
         return logits
 
     def forward_generate(self, logits):
@@ -296,7 +296,7 @@ class Block(nn.Module):
         # apply multihead attention
         logits = logits[:, -1, :] + self.SelfAttention.forward_generate(logits)  # (1, 1, HEAD_SIZE)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (1, BLOCK_SIZE, HEAD_SIZE) or (1, 1, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (1, 1, HEAD_SIZE)
         return logits
 
 
@@ -338,8 +338,8 @@ class GPTLanguageModel(nn.Module):
         )  # (BLOCK_SIZE,N_EMBD)
         logits = token_embed + position_embed  # (1,BLOCK_SIZE,N_EMBD)
         logits = self.blocks(logits)  # (1,BLOCK_SIZE,N_EMBD)
-        logits = self.FinalLayerNormal(logits)  # (1,BLOCK_SIZE,N_EMBD) or (1,1,N_EMBD)
-        logits = self.lm_head(logits)  # (1,BLOCK_SIZE,vocab_size) or (1,1,vocab_size)
+        logits = self.FinalLayerNormal(logits)  # (1,BLOCK_SIZE,N_EMBD)
+        logits = self.lm_head(logits)  # (1,BLOCK_SIZE,vocab_size)
 
         return logits
 
@@ -357,8 +357,8 @@ class GPTLanguageModel(nn.Module):
             logits = self.blocks[index](logits)  # (1,BLOCK_SIZE,N_EMBD)
         logits = self.blocks[N_LAYER-1].forward_generate(logits)  # (1,1,N_EMBD)
 
-        logits = self.FinalLayerNormal(logits)  # (1,BLOCK_SIZE,N_EMBD) or (1,1,N_EMBD)
-        logits = self.lm_head(logits)  # (1,BLOCK_SIZE,vocab_size) or (1,1,vocab_size)
+        logits = self.FinalLayerNormal(logits)  # (1,1,N_EMBD)
+        logits = self.lm_head(logits)  # (1,1,vocab_size)
 
         return logits
 
