@@ -362,6 +362,24 @@ class GPTLanguageModel(nn.Module):
 
         return logits
 
+    def generate(self, context):
+        """ generate tokens after  """
+
+        # context is initally (1, BLOCK_SIZE) array of indices in the current context
+        while context[0].tolist()[-1] != vocab_to_int['"']:
+            # crop context to the last BLOCK_SIZE tokens
+            context_crop = context[:, -BLOCK_SIZE:]
+            # get the predictions focus only on the last time step
+            logits = self.forward_generate(context_crop) # (1, vocab_size)
+            # apply softmax to get probabilities
+            probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
+            # sample from the distribution
+            context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
+            # append sampled index to the running sequence
+            context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
+
+        return context
+
 
 def batch(model, data):
     """ get a batch of training data """
@@ -399,25 +417,6 @@ def batch(model, data):
     loss = loss / BATCH_SIZE
 
     return loss
-
-
-def generate(model, context):
-    """ generate tokens after  """
-
-    # context is initally (1, BLOCK_SIZE) array of indices in the current context
-    while context[0].tolist()[-1] != vocab_to_int['"']:
-        # crop context to the last BLOCK_SIZE tokens
-        context_crop = context[:, -BLOCK_SIZE:]
-        # get the predictions focus only on the last time step
-        logits = model.forward_generate(context_crop) # (1, vocab_size)
-        # apply softmax to get probabilities
-        probabilities = F.softmax(logits, dim=-1)  # (1, vocab_size)
-        # sample from the distribution
-        context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
-        # append sampled index to the running sequence
-        context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
-
-    return context
 
 
 # this property improves performance for this function
@@ -483,7 +482,7 @@ def question_answerer(model, question_string):
     )
     for looper in range(len(question)):
         context[0][looper] = question[looper]
-    generated = generate(model, context)
+    generated = model.generate(context)
 
     # blank line between separate sets of questions and answers
     print_and_write_to_file('')
