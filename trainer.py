@@ -347,13 +347,13 @@ class GPTLanguageModel(nn.Module):
         """ generate tokens after  """
 
         # only get the last BLOCK_SIZE elements of context for list of embedded tokens
-        token_embed = self.token_embedding_table(context[:, -BLOCK_SIZE:])  # (1, BLOCK_SIZE, N_EMBD)
+        token_embed = self.token_embedding_table(context[-BLOCK_SIZE:]).unsqueeze(0)  # (1, BLOCK_SIZE, N_EMBD)
         # the position embedding is constant in the generation loop
         position_embed = self.position_embedding_table(
             torch.arange(BLOCK_SIZE, device=DEVICE)
-        )  # (BLOCK_SIZE, N_EMBD)
-        # context is initally (1, BLOCK_SIZE) array of indices in the current context
-        while context[0].tolist()[-1] != vocab_to_int['"']:
+        ).unsqueeze(0)  # (1, BLOCK_SIZE, N_EMBD)
+        # context is initally (BLOCK_SIZE) array of indices in the current context
+        while context.tolist()[-1] != vocab_to_int['"']:
             # get the predictions focus only on the last time step
             logits = token_embed + position_embed  # (1, BLOCK_SIZE, N_EMBD)
             for index in range(N_LAYER-1):
@@ -367,7 +367,7 @@ class GPTLanguageModel(nn.Module):
             # sample from the distribution
             context_next_part = torch.multinomial(probabilities, num_samples=1)  # (1, 1)
             # append sampled index to the running sequence
-            context = torch.cat((context, context_next_part), dim=1)  # (1, current context length + 1)
+            context = torch.cat((context, context_next_part[0]), dim=0)  # (current context length + 1)
 
             # shift list of embedded tokens and add the one for context_next_part
             for looper in range(1, BLOCK_SIZE):
@@ -472,19 +472,19 @@ def question_answerer(model, question_string):
 
     # generate from the model
     context = torch.zeros(
-        (1, len(question)),
+        len(question),
         dtype=torch.long,
         device=DEVICE
     )
     for looper in range(len(question)):
-        context[0][looper] = question[looper]
+        context[looper] = question[looper]
     generated = model.generate(context)
 
     # blank line between separate sets of questions and answers
     print_and_write_to_file('')
 
     # generated only has 1 element, this is the string with the question and answer
-    output_as_string = decode(generated[0].tolist())
+    output_as_string = decode(generated.tolist())
 
     # make sure there are not multiple newlines between separate sets of questions and answers
     while output_as_string[0] == '\n':
