@@ -378,18 +378,18 @@ class GPTLanguageModel(nn.Module):
     def generate(self, context):
         """ generate tokens after  """
 
-        # only get the last BLOCK_SIZE elements of context for list of embedded tokens
-        token_embed = self.token_embedding_table(context[-BLOCK_SIZE:])  # (BLOCK_SIZE, N_EMBD)
+        # at max only get the last BLOCK_SIZE elements of context for list of embedded tokens
+        token_embed = self.token_embedding_table(context[-BLOCK_SIZE:])  # (<= BLOCK_SIZE, N_EMBD)
         # the position embedding is constant in the generation loop
         position_embed = self.position_embedding_table(
             torch.arange(len(token_embed), device=DEVICE)
-        )  # (BLOCK_SIZE, N_EMBD)
-        # context is initally (BLOCK_SIZE) array of indices in the current context
+        )  # (<= BLOCK_SIZE, N_EMBD)
+        # context is initally (<= BLOCK_SIZE) array of indices in the current context
         while context.tolist()[-1] != vocab_to_int['"']:
             # get the predictions focus only on the last time step
-            logits = token_embed + position_embed  # (BLOCK_SIZE, N_EMBD)
+            logits = token_embed + position_embed  # (<= BLOCK_SIZE, N_EMBD)
             for index in range(N_LAYER-1):
-                logits = self.blocks[index].forward_generate(logits)  # (BLOCK_SIZE, N_EMBD)
+                logits = self.blocks[index].forward_generate(logits)  # (<= BLOCK_SIZE, N_EMBD)
             logits = self.blocks[N_LAYER-1].forward_generate_end(logits)  # (N_EMBD)
             logits = self.FinalLayerNormal(logits)  # (N_EMBD)
             logits = self.lm_head(logits)  # (vocab_size)
@@ -402,9 +402,15 @@ class GPTLanguageModel(nn.Module):
             context = torch.cat((context, context_next_part), dim=0)  # (current context length + 1)
 
             # shift list of embedded tokens and add the one for context_next_part
-            for looper in range(1, len(token_embed)):
-                token_embed[looper - 1] = token_embed[looper]
-            token_embed[len(token_embed) - 1] = self.token_embedding_table(context_next_part)
+            if len(token_embed) == BLOCK_SIZE:
+                for looper in range(1, BLOCK_SIZE):
+                    token_embed[looper - 1] = token_embed[looper]
+                token_embed[BLOCK_SIZE - 1] = self.token_embedding_table(context_next_part)
+            else:
+                temp = torch.zeros(len(token_embed) + 1, N_EMBD)
+                for looper in range(len(token_embed)):
+                    temp[looper] = token_embed[looper]
+                temp[len(token_embed)] = self.token_embedding_table(context_next_part)[0]
 
         return context
 
