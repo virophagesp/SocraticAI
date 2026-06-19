@@ -14,7 +14,7 @@ BLOCK_SIZE = 256
 # Maximum iterations of training
 MAX_ITERS = 1000
 # Beginning model's amount of iterations
-BEGIN_INTERATIONS = 1000
+BEGIN_INTERATIONS = 0
 # Every 100 iterations of training, print loss and save stage
 EVAL_INTERVAL = 100
 # The rate of learning
@@ -222,7 +222,7 @@ class Head(nn.Module):
         # compute attention scores ("affinities")
         weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE, BLOCK_SIZE)
         weight = weight.masked_fill(
-            self.tril[:BLOCK_SIZE, :BLOCK_SIZE] == 0,
+            self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
         )  # (BLOCK_SIZE, BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE, BLOCK_SIZE)
@@ -237,7 +237,7 @@ class Head(nn.Module):
         # compute attention scores ("affinities")
         weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE)
         weight = weight.masked_fill(
-            self.tril[-1, :BLOCK_SIZE] == 0,
+            self.tril[-1, :len(weight)] == 0,
             float('-inf')
         )  # (BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE)
@@ -382,7 +382,7 @@ class GPTLanguageModel(nn.Module):
         token_embed = self.token_embedding_table(context[-BLOCK_SIZE:])  # (BLOCK_SIZE, N_EMBD)
         # the position embedding is constant in the generation loop
         position_embed = self.position_embedding_table(
-            torch.arange(BLOCK_SIZE, device=DEVICE)
+            torch.arange(len(token_embed), device=DEVICE)
         )  # (BLOCK_SIZE, N_EMBD)
         # context is initally (BLOCK_SIZE) array of indices in the current context
         while context.tolist()[-1] != vocab_to_int['"']:
@@ -402,9 +402,9 @@ class GPTLanguageModel(nn.Module):
             context = torch.cat((context, context_next_part), dim=0)  # (current context length + 1)
 
             # shift list of embedded tokens and add the one for context_next_part
-            for looper in range(1, BLOCK_SIZE):
+            for looper in range(1, len(token_embed)):
                 token_embed[looper - 1] = token_embed[looper]
-            token_embed[BLOCK_SIZE - 1] = self.token_embedding_table(context_next_part)
+            token_embed[len(token_embed) - 1] = self.token_embedding_table(context_next_part)
 
         return context
 
