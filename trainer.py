@@ -14,7 +14,7 @@ BLOCK_SIZE = 256
 # Maximum iterations of training
 MAX_ITERS = 1000
 # Beginning model's amount of iterations
-BEGIN_INTERATIONS = 0
+BEGIN_INTERATIONS = 1000
 # Every 100 iterations of training, print loss and save stage
 EVAL_INTERVAL = 100
 # The rate of learning
@@ -214,7 +214,22 @@ class Head(nn.Module):
         query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (BLOCK_SIZE, HEAD_SIZE)
         return key, value
 
-    def forward_generate(self, head_input, key, value):
+    def forward_generate(self, head_input):
+        """  """
+
+        # split the merged qkv layer into separate query key and value
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (BLOCK_SIZE,HEAD_SIZE)
+        # compute attention scores ("affinities")
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE, BLOCK_SIZE)
+        weight = weight.masked_fill(
+            self.tril[:BLOCK_SIZE, :BLOCK_SIZE] == 0,
+            float('-inf')
+        )  # (BLOCK_SIZE, BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE, BLOCK_SIZE)
+        # perform the weighted aggregation of the values
+        return weight @ value  # (BLOCK_SIZE, BLOCK_SIZE) @ (BLOCK_SIZE, HEAD_SIZE) -> (BLOCK_SIZE, HEAD_SIZE)
+
+    def forward_generate_end(self, head_input, key, value):
         """  """
 
         # split the merged qkv layer into separate query key and value
@@ -253,6 +268,14 @@ class MultiHeadAttention(nn.Module):
         """  """
 
         output = self.LayerNormal(logits) # (BLOCK_SIZE, HEAD_SIZE)
+        output = torch.cat([self.heads[h].forward_generate(output) for h in range(N_HEAD)], dim=-1) # (BLOCK_SIZE, HEAD_SIZE)
+        output = self.project(output) # (BLOCK_SIZE, HEAD_SIZE)
+        return output
+
+    def forward_generate_end(self, logits):
+        """  """
+
+        output = self.LayerNormal(logits) # (BLOCK_SIZE, HEAD_SIZE)
         keys = []
         values = []
         temp = []
@@ -260,7 +283,7 @@ class MultiHeadAttention(nn.Module):
             key, value = self.heads[h].pre_get_generate(output) # both are (BLOCK_SIZE, HEAD_SIZE)
             keys.append(key)
             values.append(value)
-            temp.append(self.heads[h].forward_generate(output[-1, :], keys[h], values[h])) # each is (HEAD_SIZE)
+            temp.append(self.heads[h].forward_generate_end(output[-1, :], keys[h], values[h])) # each is (HEAD_SIZE)
         output = torch.cat(temp, dim=-1) # (HEAD_SIZE)
         output = self.project(output) # (HEAD_SIZE)
         return output
@@ -294,7 +317,16 @@ class Block(nn.Module):
         """  """
 
         # apply multihead attention
-        logits = logits[-1, :] + self.SelfAttention.forward_generate(logits)  # (HEAD_SIZE)
+        logits = logits + self.SelfAttention.forward_generate(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        # apply feed forward
+        logits = logits + self.FeedFoward(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        return logits
+
+    def forward_generate_end(self, logits):
+        """  """
+
+        # apply multihead attention
+        logits = logits[-1, :] + self.SelfAttention.forward_generate_end(logits)  # (HEAD_SIZE)
         # apply feed forward
         logits = logits + self.FeedFoward(logits)  # (HEAD_SIZE)
         return logits
@@ -357,8 +389,8 @@ class GPTLanguageModel(nn.Module):
             # get the predictions focus only on the last time step
             logits = token_embed + position_embed  # (BLOCK_SIZE, N_EMBD)
             for index in range(N_LAYER-1):
-                logits = self.blocks[index](logits.unsqueeze(0)).squeeze(0)  # (BLOCK_SIZE, N_EMBD)
-            logits = self.blocks[N_LAYER-1].forward_generate(logits)  # (N_EMBD)
+                logits = self.blocks[index].forward_generate(logits)  # (BLOCK_SIZE, N_EMBD)
+            logits = self.blocks[N_LAYER-1].forward_generate_end(logits)  # (N_EMBD)
             logits = self.FinalLayerNormal(logits)  # (N_EMBD)
             logits = self.lm_head(logits)  # (vocab_size)
 
