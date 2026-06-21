@@ -418,36 +418,37 @@ class GPTLanguageModel(nn.Module):
 def batch(model, data):
     """ get a batch of training data """
 
-    # remove loss calculation involving newline characters at the front
-    crop_front = []
-    # load block sized chunks of a batch of the data for inputs context and targets
-    context = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-    targets = torch.zeros([BATCH_SIZE, BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+    # loss to return
+    loss = torch.tensor(0)
     batch_index = 0
     while batch_index < BATCH_SIZE:
+        # load block sized chunks of a batch of the data for inputs context and targets
+        context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+        targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
         for block_index in range(BLOCK_SIZE):
-            context[batch_index][block_index] = data[data_batch + block_index]
-            targets[batch_index][block_index] = data[data_batch + block_index + 1]
+            context[block_index] = data[data_batch + block_index]
+            targets[block_index] = data[data_batch + block_index + 1]
 
         # if the data batch was all newline characters, restart the loop iteration
-        if targets[batch_index][BLOCK_SIZE-1] != vocab_to_int['\n']:
+        if targets[BLOCK_SIZE-1] != vocab_to_int['\n']:
             # remove loss calculation involving newline characters at the front
-            crop_front.append(0)
+            crop_front = 0
             for block_index in range(BLOCK_SIZE):
-                if targets[batch_index][block_index] == vocab_to_int['\n']:
-                    crop_front[batch_index] += 1
+                if targets[block_index] == vocab_to_int['\n']:
+                    crop_front += 1
                 else:
                     break
+
+            # calculate loss and add to total
+            logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+            target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
+            loss = loss + F.cross_entropy(logit, target)
+
+            # increase index
             batch_index += 1
 
-    logits = model.forward(context)
-
-    loss = torch.tensor(0)
-    for batch_index in range(BATCH_SIZE):
-        logit = logits[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]), vocab_size)
-        target = targets[batch_index][crop_front[batch_index]:].view((BLOCK_SIZE - crop_front[batch_index]))
-        loss = loss + F.cross_entropy(logit, target)
     loss = loss / BATCH_SIZE
 
     return loss
