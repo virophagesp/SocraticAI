@@ -196,38 +196,38 @@ class Head(nn.Module):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (BLOCK_SIZE, HEAD_SIZE)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
         # compute attention scores ("affinities")
-        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE, BLOCK_SIZE)
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = weight.masked_fill(
-            self.tril[:BLOCK_SIZE, :BLOCK_SIZE] == 0,
+            self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
-        )  # (BLOCK_SIZE, BLOCK_SIZE)
-        weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE, BLOCK_SIZE)
+        )  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (BLOCK_SIZE, BLOCK_SIZE) @ (BLOCK_SIZE, HEAD_SIZE) -> (BLOCK_SIZE, HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
 
     def pre_get_generate(self, head_input):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (BLOCK_SIZE, HEAD_SIZE)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
         return key, value
 
     def forward_generate(self, head_input):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (BLOCK_SIZE,HEAD_SIZE)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
         # compute attention scores ("affinities")
-        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE, BLOCK_SIZE)
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
-        )  # (BLOCK_SIZE, BLOCK_SIZE)
-        weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE, BLOCK_SIZE)
+        )  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (BLOCK_SIZE, BLOCK_SIZE) @ (BLOCK_SIZE, HEAD_SIZE) -> (BLOCK_SIZE, HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
 
     def forward_generate_end(self, head_input, key, value):
         """  """
@@ -235,14 +235,14 @@ class Head(nn.Module):
         # split the merged qkv layer into separate query key and value
         query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (HEAD_SIZE)
         # compute attention scores ("affinities")
-        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, BLOCK_SIZE) -> (BLOCK_SIZE)
+        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[-1, :len(weight)] == 0,
             float('-inf')
-        )  # (BLOCK_SIZE)
-        weight = F.softmax(weight, dim=-1)  # (BLOCK_SIZE)
+        )  # (<= BLOCK_SIZE)
+        weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (BLOCK_SIZE) @ (BLOCK_SIZE, HEAD_SIZE) -> (HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (HEAD_SIZE)
 
 
 class MultiHeadAttention(nn.Module):
@@ -259,28 +259,28 @@ class MultiHeadAttention(nn.Module):
     def forward(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (BLOCK_SIZE, HEAD_SIZE)
-        output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (BLOCK_SIZE, HEAD_SIZE)
-        output = self.project(output) # (BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = self.project(output) # (<= BLOCK_SIZE, HEAD_SIZE)
         return output
 
     def forward_generate(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (BLOCK_SIZE, HEAD_SIZE)
-        output = torch.cat([self.heads[h].forward_generate(output) for h in range(N_HEAD)], dim=-1) # (BLOCK_SIZE, HEAD_SIZE)
-        output = self.project(output) # (BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = torch.cat([self.heads[h].forward_generate(output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = self.project(output) # (<= BLOCK_SIZE, HEAD_SIZE)
         return output
 
     def forward_generate_end(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
         keys = []
         values = []
         temp = []
         for h in range(N_HEAD):
-            key, value = self.heads[h].pre_get_generate(output) # both are (BLOCK_SIZE, HEAD_SIZE)
+            key, value = self.heads[h].pre_get_generate(output) # both are (<= BLOCK_SIZE, HEAD_SIZE)
             keys.append(key)
             values.append(value)
             temp.append(self.heads[h].forward_generate_end(output[-1, :], keys[h], values[h])) # each is (HEAD_SIZE)
@@ -308,18 +308,18 @@ class Block(nn.Module):
         """  """
 
         # apply multihead attention
-        logits = logits + self.SelfAttention(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.SelfAttention(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
         return logits
 
     def forward_generate(self, logits):
         """  """
 
         # apply multihead attention
-        logits = logits + self.SelfAttention.forward_generate(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.SelfAttention.forward_generate(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
         return logits
 
     def forward_generate_end(self, logits):
@@ -363,15 +363,15 @@ class GPTLanguageModel(nn.Module):
     def forward(self, context):
         """  """
 
-        # context and targets are both (BLOCK_SIZE) tensor of integers
-        token_embed = self.token_embedding_table(context)  # (BLOCK_SIZE, N_EMBD)
+        # context and targets are both (<= BLOCK_SIZE) tensor of integers
+        token_embed = self.token_embedding_table(context)  # (<= BLOCK_SIZE, N_EMBD)
         position_embed = self.position_embedding_table(
-            torch.arange(BLOCK_SIZE, device=DEVICE)
-        )  # (BLOCK_SIZE, N_EMBD)
-        logits = token_embed + position_embed  # (BLOCK_SIZE, N_EMBD)
-        logits = self.blocks(logits)  # (BLOCK_SIZE, N_EMBD)
-        logits = self.FinalLayerNormal(logits)  # (BLOCK_SIZE, N_EMBD)
-        logits = self.lm_head(logits)  # (BLOCK_SIZE, vocab_size)
+            torch.arange(len(token_embed), device=DEVICE)
+        )  # (<= BLOCK_SIZE, N_EMBD)
+        logits = token_embed + position_embed  # (<= BLOCK_SIZE, N_EMBD)
+        logits = self.blocks(logits)  # (<= BLOCK_SIZE, N_EMBD)
+        logits = self.FinalLayerNormal(logits)  # (<= BLOCK_SIZE, N_EMBD)
+        logits = self.lm_head(logits)  # (<= BLOCK_SIZE, vocab_size)
 
         return logits
 
