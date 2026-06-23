@@ -425,7 +425,7 @@ def batch(model, data):
         # load block sized chunks of a batch of the data for inputs context and targets
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
 
-        # if the data batch was all newline characters, restart the loop iteration
+        # if the data batch ends with a newline character, restart the loop iteration
         if data[data_batch + BLOCK_SIZE] != vocab_to_int['\n']:
             context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
             targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
