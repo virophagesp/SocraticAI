@@ -423,16 +423,17 @@ def batch(model, data):
     batch_index = 0
     while batch_index < BATCH_SIZE:
         # load block sized chunks of a batch of the data for inputs context and targets
-        context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-        targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-
         data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
-        for block_index in range(BLOCK_SIZE):
-            context[block_index] = data[data_batch + block_index]
-            targets[block_index] = data[data_batch + block_index + 1]
 
         # if the data batch was all newline characters, restart the loop iteration
-        if targets[BLOCK_SIZE-1] != vocab_to_int['\n']:
+        if data[data_batch + BLOCK_SIZE] != vocab_to_int['\n']:
+            context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+            targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+
+            for block_index in range(BLOCK_SIZE):
+                context[block_index] = data[data_batch + block_index]
+                targets[block_index] = data[data_batch + block_index + 1]
+
             # remove loss calculation involving newline characters at the front
             crop_front = 0
             for block_index in range(BLOCK_SIZE):
