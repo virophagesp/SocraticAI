@@ -427,28 +427,30 @@ def batch(model, data):
 
         # if the data batch ends with a newline character, restart the loop iteration
         if data[data_batch + BLOCK_SIZE] != vocab_to_int['\n']:
-            context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-            targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+            # restart loop iteration if learning tokens of questions instead of answers
+            if encode('?"\nanswer: "i don\'t know')[0] in data[data_batch:data_batch + BLOCK_SIZE]:
+                context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+                targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
 
-            for block_index in range(BLOCK_SIZE):
-                context[block_index] = data[data_batch + block_index]
-                targets[block_index] = data[data_batch + block_index + 1]
+                for block_index in range(BLOCK_SIZE):
+                    context[block_index] = data[data_batch + block_index]
+                    targets[block_index] = data[data_batch + block_index + 1]
 
-            # remove loss calculation involving newline characters at the front
-            crop_front = 0
-            for block_index in range(BLOCK_SIZE):
-                if targets[block_index] == vocab_to_int['\n']:
-                    crop_front += 1
-                else:
-                    break
+                # remove loss calculation involving newline characters at the front
+                crop_front = 0
+                for block_index in range(BLOCK_SIZE):
+                    if targets[block_index] == vocab_to_int['\n']:
+                        crop_front += 1
+                    else:
+                        break
 
-            # calculate loss and add to total
-            logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
-            target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
-            loss = loss + F.cross_entropy(logit, target)
+                # calculate loss and add to total
+                logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+                target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
+                loss = loss + F.cross_entropy(logit, target)
 
-            # increase index
-            batch_index += 1
+                # increase index
+                batch_index += 1
 
     loss = loss / BATCH_SIZE
 
