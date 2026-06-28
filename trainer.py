@@ -48,9 +48,6 @@ def print_and_write_to_file(string_input):
     testing_file.write(f'{string_input}\n')
 
 
-# Manually set seed for ai for consistent results during testing and such
-torch.manual_seed(1337)
-
 # Here are all the words that are common for every question and answer
 # they will be converted to singular tokens
 # to improve performance without increasing block size
@@ -543,6 +540,9 @@ def trim_memory():
   libc = ctypes.CDLL("libc.so.6")
   return libc.malloc_trim(0)
 
+
+# Manually set seed for ai for consistent results during testing and such
+torch.manual_seed(1337)
 
 # Ask user if they want to retrain the models
 mode = input('retrain the models (y/n): ').lower()
