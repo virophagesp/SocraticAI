@@ -32,11 +32,6 @@ N_LAYER = 6
 # The size of self-attention heads
 HEAD_SIZE = N_EMBD // N_HEAD
 
-
-# Open and read the raw training and testing data from the JSON files
-raw_training_data = json.load(open('questions.json', 'r'))
-raw_testing_data = json.load(open('testing.json', 'r'))
-
 # file that records testing
 testing_file = open('testing.txt', 'w')
 
@@ -46,53 +41,6 @@ def print_and_write_to_file(string_input):
 
     print(string_input)
     testing_file.write(f'{string_input}\n')
-
-
-# Here are all the words that are common for every question and answer
-# they will be converted to singular tokens
-# to improve performance without increasing block size
-words = [
-    'question: "',
-    'what',
-    'why',
-    'where',
-    'how',
-    'should',
-    '?"\nanswer: "i don\'t know',
-    'could',
-    'you',
-    'explain',
-    'the',
-    'concept',
-    'of'
-]
-# within all the data, each known letter, number, and special character, as a token
-chars = ''
-for data in raw_training_data:
-    if type(data) == list:
-        chars += ''.join(data)
-    else:
-        chars += data
-for data in raw_testing_data:
-    if type(data) == list:
-        chars += ''.join(data)
-    else:
-        chars += data
-chars += ''.join(words)
-# remove duplicate characters and converts the string into a sorted list
-chars = sorted(list(set(chars)))
-# all tokens
-vocabulary = chars + words
-
-# size of vocabuary
-vocab_size = len(vocabulary)
-# create encoding mapping from characters to integers
-# and decoding mapping from integers to characters
-vocab_to_int = {}
-int_to_vocab = {}
-for i, ch in enumerate(vocabulary):
-    vocab_to_int[ch] = i
-    int_to_vocab[i] = ch
 
 
 def filter(string):
@@ -173,6 +121,56 @@ def raw_to_processed(raw_data):
         data_looper += 1
     return output_data
 
+
+# Open and read the raw training and testing data from the JSON files
+raw_training_data = json.load(open('questions.json', 'r'))
+raw_testing_data = json.load(open('testing.json', 'r'))
+
+# Here are all the words that are common for every question and answer
+# they will be converted to singular tokens
+# to improve performance without increasing block size
+words = [
+    'question: "',
+    'what',
+    'why',
+    'where',
+    'how',
+    'should',
+    '?"\nanswer: "i don\'t know',
+    'could',
+    'you',
+    'explain',
+    'the',
+    'concept',
+    'of'
+]
+# within all the data, each known letter, number, and special character, as a token
+chars = ''
+for data in raw_training_data:
+    if type(data) == list:
+        chars += ''.join(data)
+    else:
+        chars += data
+for data in raw_testing_data:
+    if type(data) == list:
+        chars += ''.join(data)
+    else:
+        chars += data
+chars += ''.join(words)
+# remove duplicate characters and converts the string into a sorted list
+chars = sorted(list(set(chars)))
+# all tokens
+vocabulary = chars + words
+
+# size of vocabuary
+vocab_size = len(vocabulary)
+# create encoding mapping from characters to integers
+# and decoding mapping from integers to characters
+vocab_to_int = {}
+int_to_vocab = {}
+for i, ch in enumerate(vocabulary):
+    vocab_to_int[ch] = i
+    int_to_vocab[i] = ch
 
 # Open the files containing output of using preprocessor
 train_data = encode(raw_to_processed(raw_training_data).lower())
