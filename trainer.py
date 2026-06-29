@@ -113,11 +113,11 @@ def raw_to_processed(raw_data):
             #  but could cause issues and confusion for users
             #  if it seemingly starts getting new weird inputs
             #  that weren't typed in
+            temp = f'question: "{question.lower()}"\nanswer: "{answer.lower()}"\n'
             for i in range(BLOCK_SIZE):
-                output_data += '\n'
+                temp = '\n' + temp
             # Print question then answer
-            output_data += f'question: "{question}"\n'
-            output_data += f'answer: "{answer}"\n'
+            output_data += temp
         data_looper += 1
     return output_data
 
@@ -173,8 +173,8 @@ for i, ch in enumerate(vocabulary):
     int_to_vocab[i] = ch
 
 # Open the files containing output of using preprocessor
-train_data = encode(raw_to_processed(raw_training_data).lower())
-validation_data = encode(raw_to_processed(raw_testing_data).lower())
+train_data = encode(raw_to_processed(raw_training_data))
+validation_data = encode(raw_to_processed(raw_testing_data))
 
 
 class Head(nn.Module):
