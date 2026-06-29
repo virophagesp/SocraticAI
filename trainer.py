@@ -95,7 +95,7 @@ def decode(tokens):
 
 # process the raw json data and convert it to usable text
 def raw_to_processed(raw_data):
-    output_data = ""
+    output_data = []
     # Loop over data and write to input file
     data_looper = 0
     # only half the length since it will be using two items at a time
@@ -113,9 +113,9 @@ def raw_to_processed(raw_data):
             #  but could cause issues and confusion for users
             #  if it seemingly starts getting new weird inputs
             #  that weren't typed in
-            temp = f'question: "{question.lower()}"\nanswer: "{answer.lower()}"\n'
+            temp = encode(f'question: "{question.lower()}"\nanswer: "{answer.lower()}"\n')
             for i in range(BLOCK_SIZE):
-                temp = '\n' + temp
+                temp = encode('\n') + temp
             # Print question then answer
             output_data += temp
         data_looper += 1
@@ -173,8 +173,8 @@ for i, ch in enumerate(vocabulary):
     int_to_vocab[i] = ch
 
 # Open the files containing output of using preprocessor
-train_data = encode(raw_to_processed(raw_training_data))
-validation_data = encode(raw_to_processed(raw_testing_data))
+train_data = raw_to_processed(raw_training_data)
+validation_data = raw_to_processed(raw_testing_data)
 
 
 class Head(nn.Module):
