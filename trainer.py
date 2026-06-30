@@ -113,7 +113,7 @@ def raw_to_processed(raw_data):
             #  but could cause issues and confusion for users
             #  if it seemingly starts getting new weird inputs
             #  that weren't typed in
-            temp = encode(f'question: "{question.lower()}"\nanswer: "{answer.lower()}"\n')
+            temp = encode(f'question: "{question.lower()}"\nanswer: "{answer.lower()}"')
             for i in range(BLOCK_SIZE):
                 temp = encode('\n') + temp
             # Print question then answer
@@ -421,32 +421,30 @@ def batch(model, data):
         data_batch = data[torch.randint(len(data), (1,))[0]]
         data_batch_index = torch.randint(len(data_batch) - BLOCK_SIZE, (1,))[0]
 
-        # if the data batch ends with a newline character, restart the loop iteration
-        if data_batch[data_batch_index + BLOCK_SIZE] != vocab_to_int['\n']:
-            # restart loop iteration if learning tokens of questions instead of answers
-            if encode('?"\nanswer: "i don\'t know')[0] in data_batch[data_batch_index:data_batch_index + BLOCK_SIZE]:
-                context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-                targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+        # restart loop iteration if learning tokens of questions instead of answers
+        if encode('?"\nanswer: "i don\'t know')[0] in data_batch[data_batch_index:data_batch_index + BLOCK_SIZE]:
+            context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
+            targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
 
-                for block_index in range(BLOCK_SIZE):
-                    context[block_index] = data_batch[data_batch_index + block_index]
-                    targets[block_index] = data_batch[data_batch_index + block_index + 1]
+            for block_index in range(BLOCK_SIZE):
+                context[block_index] = data_batch[data_batch_index + block_index]
+                targets[block_index] = data_batch[data_batch_index + block_index + 1]
 
-                # remove loss calculation involving newline characters at the front
-                crop_front = 0
-                for block_index in range(BLOCK_SIZE):
-                    if targets[block_index] == vocab_to_int['\n']:
-                        crop_front += 1
-                    else:
-                        break
+            # remove loss calculation involving newline characters at the front
+            crop_front = 0
+            for block_index in range(BLOCK_SIZE):
+                if targets[block_index] == vocab_to_int['\n']:
+                    crop_front += 1
+                else:
+                    break
 
-                # calculate loss and add to total
-                logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
-                target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
-                loss = loss + F.cross_entropy(logit, target)
+            # calculate loss and add to total
+            logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+            target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
+            loss = loss + F.cross_entropy(logit, target)
 
-                # increase index
-                batch_index += 1
+            # increase index
+            batch_index += 1
 
     loss = loss / BATCH_SIZE
 
