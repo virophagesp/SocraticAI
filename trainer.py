@@ -117,7 +117,7 @@ def raw_to_processed(raw_data):
             for i in range(BLOCK_SIZE):
                 temp = encode('\n') + temp
             # Print question then answer
-            output_data += temp
+            output_data.append(temp)
         data_looper += 1
     return output_data
 
@@ -418,18 +418,19 @@ def batch(model, data):
     batch_index = 0
     while batch_index < BATCH_SIZE:
         # load block sized chunks of a batch of the data for inputs context and targets
-        data_batch = torch.randint(len(data) - BLOCK_SIZE, (1,))[0]
+        data_batch = data[torch.randint(len(data), (1,))[0]]
+        data_batch_index = torch.randint(len(data_batch) - BLOCK_SIZE, (1,))[0]
 
         # if the data batch ends with a newline character, restart the loop iteration
-        if data[data_batch + BLOCK_SIZE] != vocab_to_int['\n']:
+        if data_batch[data_batch_index + BLOCK_SIZE] != vocab_to_int['\n']:
             # restart loop iteration if learning tokens of questions instead of answers
-            if encode('?"\nanswer: "i don\'t know')[0] in data[data_batch:data_batch + BLOCK_SIZE]:
+            if encode('?"\nanswer: "i don\'t know')[0] in data_batch[data_batch_index:data_batch_index + BLOCK_SIZE]:
                 context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
                 targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
 
                 for block_index in range(BLOCK_SIZE):
-                    context[block_index] = data[data_batch + block_index]
-                    targets[block_index] = data[data_batch + block_index + 1]
+                    context[block_index] = data_batch[data_batch_index + block_index]
+                    targets[block_index] = data_batch[data_batch_index + block_index + 1]
 
                 # remove loss calculation involving newline characters at the front
                 crop_front = 0
