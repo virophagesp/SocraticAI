@@ -104,20 +104,8 @@ def raw_to_processed(raw_data):
         question = raw_data[data_looper*2]
         # Loop over the answers, every odd number are the lists
         for answer in raw_data[data_looper*2+1]:
-            # Add the same amount of newline characters
-            #  as block_size in the training script
-            # The reason why this is done is because
-            #  the ai will incorrectly learn to try
-            #  to predict more questions after answering
-            #  this not only is not something it should learn
-            #  but could cause issues and confusion for users
-            #  if it seemingly starts getting new weird inputs
-            #  that weren't typed in
-            temp = encode(f'question: "{question.lower()}"\nanswer: "{answer.lower()}"')
-            for i in range(BLOCK_SIZE):
-                temp = encode('\n') + temp
             # Print question then answer
-            output_data.append(temp)
+            output_data.append(encode(f'question: "{question.lower()}"\nanswer: "{answer.lower()}"'))
         data_looper += 1
     return output_data
 
@@ -419,6 +407,10 @@ def batch(model, data):
     while batch_index < BATCH_SIZE:
         # load block sized chunks of a batch of the data for inputs context and targets
         data_batch = data[torch.randint(len(data), (1,))[0]]
+        # Add block_size amount of newline characters
+        for i in range(BLOCK_SIZE):
+            data_batch = encode('\n') + data_batch
+        # index of data batch
         data_batch_index = torch.randint(len(data_batch) - BLOCK_SIZE, (1,))[0]
 
         # restart loop iteration if learning tokens of questions instead of answers
