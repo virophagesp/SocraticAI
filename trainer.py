@@ -190,13 +190,6 @@ class Head(nn.Module):
         # perform the weighted aggregation of the values
         return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
 
-    def pre_get_generate(self, head_input):
-        """  """
-
-        # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
-        return key, value
-
     def forward_generate(self, head_input):
         """  """
 
@@ -215,7 +208,7 @@ class Head(nn.Module):
     def forward_generate_end(self, head_input, key, value):
         """  """
 
-        # split the merged qkv layer into separate query key and value
+        # split the merged qkv layer into just query
         query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (HEAD_SIZE)
         # compute attention scores ("affinities")
         weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
@@ -259,15 +252,11 @@ class MultiHeadAttention(nn.Module):
         """  """
 
         output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
-        keys = []
-        values = []
-        temp = []
+        kv = []
         for h in range(N_HEAD):
-            key, value = self.heads[h].pre_get_generate(output) # both are (<= BLOCK_SIZE, HEAD_SIZE)
-            keys.append(key)
-            values.append(value)
-            temp.append(self.heads[h].forward_generate_end(output[-1, :], keys[h], values[h])) # each is (HEAD_SIZE)
-        output = torch.cat(temp, dim=-1) # (HEAD_SIZE)
+            # split the merged qkv layer into key and value
+            kv.append(self.heads[h].qkv(output).chunk(3, dim=-1)[1:]) # both are (<= BLOCK_SIZE, HEAD_SIZE)
+        output = torch.cat([self.heads[h].forward_generate_end(output[-1, :], kv[h][0], kv[h][1]) for h in range(N_HEAD)], dim=-1) # each is (HEAD_SIZE)
         output = self.project(output) # (HEAD_SIZE)
         return output
 
