@@ -179,46 +179,46 @@ class Head(nn.Module):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, N_EMBD)
         # compute attention scores ("affinities")
-        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, N_EMBD) @ (N_EMBD, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
         )  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, N_EMBD) -> (<= BLOCK_SIZE, N_EMBD)
 
     def forward_generate(self, head_input):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, N_EMBD)
         # compute attention scores ("affinities")
-        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, N_EMBD) @ (N_EMBD, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
         )  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, N_EMBD) -> (<= BLOCK_SIZE, N_EMBD)
 
     def forward_generate_end(self, head_input, key, value):
         """  """
 
         # split the merged qkv layer into just query
-        query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (HEAD_SIZE)
+        query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (N_EMBD)
         # compute attention scores ("affinities")
-        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
+        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (N_EMBD) @ (N_EMBD, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[-1, :len(weight)] == 0,
             float('-inf')
         )  # (<= BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (<= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (HEAD_SIZE)
+        return weight @ value  # (<= BLOCK_SIZE) @ (<= BLOCK_SIZE, N_EMBD) -> (N_EMBD)
 
 
 class MultiHeadAttention(nn.Module):
@@ -235,29 +235,29 @@ class MultiHeadAttention(nn.Module):
     def forward(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
-        output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, HEAD_SIZE)
-        output = self.project(output) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, N_EMBD)
+        output = torch.cat([self.heads[h](output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, N_EMBD)
+        output = self.project(output) # (<= BLOCK_SIZE, N_EMBD)
         return output
 
     def forward_generate(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
-        output = torch.cat([self.heads[h].forward_generate(output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, HEAD_SIZE)
-        output = self.project(output) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, N_EMBD)
+        output = torch.cat([self.heads[h].forward_generate(output) for h in range(N_HEAD)], dim=-1) # (<= BLOCK_SIZE, N_EMBD)
+        output = self.project(output) # (<= BLOCK_SIZE, N_EMBD)
         return output
 
     def forward_generate_end(self, logits):
         """  """
 
-        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, HEAD_SIZE)
+        output = self.LayerNormal(logits) # (<= BLOCK_SIZE, N_EMBD)
         kv = []
         for h in range(N_HEAD):
             # split the merged qkv layer into key and value
-            kv.append(self.heads[h].qkv(output).chunk(3, dim=-1)[1:]) # both are (<= BLOCK_SIZE, HEAD_SIZE)
-        output = torch.cat([self.heads[h].forward_generate_end(output[-1, :], kv[h][0], kv[h][1]) for h in range(N_HEAD)], dim=-1) # each is (HEAD_SIZE)
-        output = self.project(output) # (HEAD_SIZE)
+            kv.append(self.heads[h].qkv(output).chunk(3, dim=-1)[1:]) # both are (<= BLOCK_SIZE, N_EMBD)
+        output = torch.cat([self.heads[h].forward_generate_end(output[-1, :], kv[h][0], kv[h][1]) for h in range(N_HEAD)], dim=-1) # (N_EMBD)
+        output = self.project(output) # (N_EMBD)
         return output
 
 
@@ -280,27 +280,27 @@ class Block(nn.Module):
         """  """
 
         # apply multihead attention
-        logits = logits + self.SelfAttention(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.SelfAttention(logits)  # (<= BLOCK_SIZE, N_EMBD)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, N_EMBD)
         return logits
 
     def forward_generate(self, logits):
         """  """
 
         # apply multihead attention
-        logits = logits + self.SelfAttention.forward_generate(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.SelfAttention.forward_generate(logits)  # (<= BLOCK_SIZE, N_EMBD)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (<= BLOCK_SIZE, N_EMBD)
         return logits
 
     def forward_generate_end(self, logits):
         """  """
 
         # apply multihead attention
-        logits = logits[-1, :] + self.SelfAttention.forward_generate_end(logits)  # (HEAD_SIZE)
+        logits = logits[-1, :] + self.SelfAttention.forward_generate_end(logits)  # (N_EMBD)
         # apply feed forward
-        logits = logits + self.FeedFoward(logits)  # (HEAD_SIZE)
+        logits = logits + self.FeedFoward(logits)  # (N_EMBD)
         return logits
 
 
