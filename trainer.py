@@ -194,31 +194,31 @@ class Head(nn.Module):
         """  """
 
         # split the merged qkv layer into separate query key and value
-        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, N_EMBD)
+        query, key, value = self.qkv(head_input).chunk(3, dim=-1) # all three are (<= BLOCK_SIZE, HEAD_SIZE)
         # compute attention scores ("affinities")
-        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, N_EMBD) @ (N_EMBD, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
+        weight = query @ key.transpose(-2, -1) * HEAD_SIZE**-0.5  # (<= BLOCK_SIZE, HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[:len(weight), :len(weight)] == 0,
             float('-inf')
         )  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE, <= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, N_EMBD) -> (<= BLOCK_SIZE, N_EMBD)
+        return weight @ value  # (<= BLOCK_SIZE, <= BLOCK_SIZE) @ (<= BLOCK_SIZE, HEAD_SIZE) -> (<= BLOCK_SIZE, HEAD_SIZE)
 
     def forward_generate_end(self, head_input, key, value):
         """  """
 
         # split the merged qkv layer into just query
-        query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (N_EMBD)
+        query = (self.qkv(head_input).chunk(3, dim=-1))[0] # query is (HEAD_SIZE)
         # compute attention scores ("affinities")
-        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (N_EMBD) @ (N_EMBD, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
+        weight = (query @ key.transpose(-2, -1)) * HEAD_SIZE**-0.5  # (HEAD_SIZE) @ (HEAD_SIZE, <= BLOCK_SIZE) -> (<= BLOCK_SIZE)
         weight = weight.masked_fill(
             self.tril[-1, :len(weight)] == 0,
             float('-inf')
         )  # (<= BLOCK_SIZE)
         weight = F.softmax(weight, dim=-1)  # (<= BLOCK_SIZE)
         # perform the weighted aggregation of the values
-        return weight @ value  # (<= BLOCK_SIZE) @ (<= BLOCK_SIZE, N_EMBD) -> (N_EMBD)
+        return weight @ value  # (<= BLOCK_SIZE) @ (<= BLOCK_SIZE, value) -> (HEAD_SIZE)
 
 
 class MultiHeadAttention(nn.Module):
