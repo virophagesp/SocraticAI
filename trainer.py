@@ -352,7 +352,7 @@ class GPTLanguageModel(nn.Module):
 
         # at max only get the last BLOCK_SIZE elements of context for list of embedded tokens
         token_embed = self.token_embedding_table(context[-BLOCK_SIZE:])  # (<= BLOCK_SIZE, N_EMBD)
-        # the position embedding is constant in the generation loop
+        # the position embedding is constant in the generation loop if size is max BLOCK_SIZE
         position_embed = self.position_embedding_table(
             torch.arange(len(token_embed), device=DEVICE)
         )  # (<= BLOCK_SIZE, N_EMBD)
@@ -373,16 +373,21 @@ class GPTLanguageModel(nn.Module):
             # append sampled index to the running sequence
             context = torch.cat((context, context_next_part), dim=0)  # (current context length + 1)
 
-            # shift list of embedded tokens and add the one for context_next_part
             if len(token_embed) == BLOCK_SIZE:
+                # shift list of embedded tokens and add the one for context_next_part
                 for looper in range(1, BLOCK_SIZE):
                     token_embed[looper - 1] = token_embed[looper]
                 token_embed[BLOCK_SIZE - 1] = self.token_embedding_table(context_next_part)
             else:
-                temp = torch.zeros(len(token_embed) + 1, N_EMBD)
-                for looper in range(len(token_embed)):
-                    temp[looper] = token_embed[looper]
-                temp[len(token_embed)] = self.token_embedding_table(context_next_part)[0]
+                # add next token to the token embedding
+                token_embed = torch.concat((
+                    token_embed,
+                    self.token_embedding_table(context_next_part)[0].unsqueeze(0)
+                ))
+                # reinitialize the position embedding to grow
+                position_embed = self.position_embedding_table(
+                    torch.arange(len(token_embed), device=DEVICE)
+                )  # (<= BLOCK_SIZE, N_EMBD)
 
         return context
 
@@ -420,7 +425,7 @@ def batch(model, data):
                     break
 
             # calculate loss and add to total
-            logit = model.forward(context)[crop_front:].view((BLOCK_SIZE - crop_front), vocab_size)
+            logit = model.forward(context[crop_front:]).view((BLOCK_SIZE - crop_front), vocab_size)
             target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
             loss = loss + F.cross_entropy(logit, target)
 
@@ -482,10 +487,6 @@ def question_answerer(model, question_string):
 
     # encode question
     question = encode(f'question: "{filter(question_string)}?"\nanswer: "i don\'t know')
-    # when the block is not at least BLOCK_SIZE, it will crash
-    # add newline characters as placeholders, like the training data
-    while len(question) < BLOCK_SIZE:
-        question.insert(0, vocab_to_int['\n'])
 
     # generate from the model
     context = torch.zeros(
