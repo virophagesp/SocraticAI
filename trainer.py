@@ -409,24 +409,23 @@ def batch(model, data):
 
         # restart loop iteration if learning tokens of questions instead of answers
         if encode('?"\nanswer: "i don\'t know')[0] in data_batch[data_batch_index:data_batch_index + BLOCK_SIZE]:
-            context = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-            targets = torch.zeros([BLOCK_SIZE], dtype=torch.long, device=DEVICE)
-
-            for block_index in range(BLOCK_SIZE):
-                context[block_index] = data_batch[data_batch_index + block_index]
-                targets[block_index] = data_batch[data_batch_index + block_index + 1]
-
             # remove loss calculation involving newline characters at the front
             crop_front = 0
             for block_index in range(BLOCK_SIZE):
-                if targets[block_index] == vocab_to_int['\n']:
+                if data_batch[data_batch_index + block_index + 1] == vocab_to_int['\n']:
                     crop_front += 1
                 else:
                     break
 
+            context = torch.zeros([BLOCK_SIZE - crop_front], dtype=torch.long, device=DEVICE)
+            target = torch.zeros([BLOCK_SIZE - crop_front], dtype=torch.long, device=DEVICE)
+
+            for block_index in range(BLOCK_SIZE - crop_front):
+                context[block_index] = data_batch[data_batch_index + block_index + crop_front]
+                target[block_index] = data_batch[data_batch_index + block_index + crop_front + 1]
+
             # calculate loss and add to total
-            logit = model.forward(context[crop_front:]).view((BLOCK_SIZE - crop_front), vocab_size)
-            target = targets[crop_front:].view((BLOCK_SIZE - crop_front))
+            logit = model.forward(context)
             loss = loss + F.cross_entropy(logit, target)
 
             # increase index
